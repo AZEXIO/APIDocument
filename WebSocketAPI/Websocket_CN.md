@@ -1,62 +1,62 @@
-# AZEX Websocket 
+ï»¿# AZEX Websocket 
 
-##Ê¹ÓÃËµÃ÷
-
-
-ÓòÃû£ºwss://ws.azex.io
-
-**ĞòÁĞ»¯**
-
-**ÏûÏ¢ÇëÇó**£ºÏûÏ¢ÇëÇó×é³É°üÀ¨**Â·ÓÉ£¬ÃüÁî£¬ÏûÏ¢Ìå**Èı¸ö²¿·Ö
-
-ÇëÇóÏûÏ¢µÄÇ°ËÄ¸ö×Ö½Ú£¨int32£©Îª**Â·ÓÉ** 
-ÇëÇóÏûÏ¢µÄµÚÎåÓëµÚÁù¸ö×Ö½ÚÎª**ÃüÁî**£¨int16£©
+## ä½¿ç”¨è¯´æ˜
 
 
-**ÏûÏ¢½ÓÊÕ**£º·şÎñÆ÷·µ»ØµÄÏûÏ¢ÓÉ**ÃüÁî£¬ÏûÏ¢Ìå**Á½¸ö²¿·Ö×é³É
+åŸŸåï¼šwss://ws.azex.io
 
-½ÓÊÕµÄÏûÏ¢Ç°Á½¸ö×Ö½ÚÎª**ÃüÁî**£¨int16£©
+**åºåˆ—åŒ–**
 
-**ÏûÏ¢Ìå**µÄĞòÁĞ»¯Í¨¹ı[protobuf](https://developers.google.com/protocol-buffers/ "protobuf")
+**æ¶ˆæ¯è¯·æ±‚**ï¼šæ¶ˆæ¯è¯·æ±‚ç»„æˆåŒ…æ‹¬**è·¯ç”±ï¼Œå‘½ä»¤ï¼Œæ¶ˆæ¯ä½“**ä¸‰ä¸ªéƒ¨åˆ†
 
-websocket-protobuf[ÎÄ¼şÏÂÔØ](https://developers.google.com/protocol-buffers/ "ÎÄ¼şÏÂÔØ")
+è¯·æ±‚æ¶ˆæ¯çš„å‰å››ä¸ªå­—èŠ‚ï¼ˆint32ï¼‰ä¸º**è·¯ç”±** 
+è¯·æ±‚æ¶ˆæ¯çš„ç¬¬äº”ä¸ç¬¬å…­ä¸ªå­—èŠ‚ä¸º**å‘½ä»¤**ï¼ˆint16ï¼‰
 
-Àı
+
+**æ¶ˆæ¯æ¥æ”¶**ï¼šæœåŠ¡å™¨è¿”å›çš„æ¶ˆæ¯ç”±**å‘½ä»¤ï¼Œæ¶ˆæ¯ä½“**ä¸¤ä¸ªéƒ¨åˆ†ç»„æˆ
+
+æ¥æ”¶çš„æ¶ˆæ¯å‰ä¸¤ä¸ªå­—èŠ‚ä¸º**å‘½ä»¤**ï¼ˆint16ï¼‰
+
+**æ¶ˆæ¯ä½“**çš„åºåˆ—åŒ–é€šè¿‡[protobuf](https://developers.google.com/protocol-buffers/ "protobuf")
+
+websocket-protobuf[æ–‡ä»¶ä¸‹è½½](https://developers.google.com/protocol-buffers/ "æ–‡ä»¶ä¸‹è½½")
+
+ä¾‹
 ```
-//¶©ÔÄÊĞ³¡Éî¶È
+//è®¢é˜…å¸‚åœºæ·±åº¦
 message SubMarketDepth{
-    //ÊĞ³¡
+    //å¸‚åœº
     required string Market= 1 ;
-    //Ğ¡ÊıÎ»¾«¶È
+    //å°æ•°ä½ç²¾åº¦
     required int32 Precision= 2 ;
-    //»ñÈ¡ÌõÊı£¬¿ÉÑ¡ÖµÎª£º10,20,40
+    //è·å–æ¡æ•°ï¼Œå¯é€‰å€¼ä¸ºï¼š10,20,40
     required int32 Limit= 3 ;
 }
 message MarketDepthList{
-    //ÊĞ³¡Éî¶ÈÁĞ±í
+    //å¸‚åœºæ·±åº¦åˆ—è¡¨
     repeated MarketDepthDto List= 1 ;
 }
-//ÊĞ³¡Éî¶È¿ìÕÕ
+//å¸‚åœºæ·±åº¦å¿«ç…§
 message MarketDepthDto{
-    //ÊĞ³¡
+    //å¸‚åœº
     required string Market= 1 ;
-    //¾«¶È
+    //ç²¾åº¦
     required int32 Precision= 2 ;
-    //Âôµ¥ÁĞ±í
+    //å–å•åˆ—è¡¨
     repeated MarketDepth AskList= 3 ;
-    //Âòµ¥ÁĞ±í
+    //ä¹°å•åˆ—è¡¨
     repeated MarketDepth BidList= 4 ;
-    //°æ±¾ºÅ
+    //ç‰ˆæœ¬å·
     required int64 Version= 5 ;
 }
 ```
-·¢ËÍ´úÂë£¨Î±´úÂë£©ÈçÏÂ
+å‘é€ä»£ç ï¼ˆä¼ªä»£ç ï¼‰å¦‚ä¸‹
 
 ```
 websocket ws;
 protobuf protbuf;
-int16 SendCommand = 906; //ÃüÁî£º¶©ÔÄÊĞ³¡Éî¶È
-int32 route = 1; //Â·ÓÉ
+int16 SendCommand = 906; //å‘½ä»¤ï¼šè®¢é˜…å¸‚åœºæ·±åº¦
+int32 route = 1; //è·¯ç”±
 SubMarketDepth subMarket;
 subMarket.Market = "eth_btc";
 subMarket.Precision = 8;
@@ -65,619 +65,619 @@ subMarket.Limit = 10;
 ws.send(byteof(route)+byteof(SendCommand)+protbuf.Serialize(subMarket));
 ```
 
-½ÓÊÕ´úÂë£¨Î±´úÂë£©ÈçÏÂ
+æ¥æ”¶ä»£ç ï¼ˆä¼ªä»£ç ï¼‰å¦‚ä¸‹
 ```
-OnWebsocketReceived£¨byte[] data£©{
+OnWebsocketReceivedï¼ˆbyte[] dataï¼‰{
 	
-	int16 receiveCommand = ConvertToInt16£¨data.sub(0,2))
+	int16 receiveCommand = ConvertToInt16ï¼ˆdata.sub(0,2))
 	switch(receiveCommand)
 	case 1003
 		MarketDepthList dto = protbuf.Deserialize(data.sub(2,data.length))
-	//ÒµÎñ´úÂë
+	//ä¸šåŠ¡ä»£ç 
 	...
 }
 ```
 
 ----
-###¹¦ÄÜÁĞ±í
+### åŠŸèƒ½åˆ—è¡¨
 
-¹¦ÄÜ         | Ìá½»ÃüÁî                       | ½ÓÊÕÃüÁî                                     | ÓÃ´¦           | ±¸×¢
+åŠŸèƒ½         | æäº¤å‘½ä»¤                       | æ¥æ”¶å‘½ä»¤                                     | ç”¨å¤„           | å¤‡æ³¨
 ---------- | -------------------------- | ---------------------------------------- | ------------ | -------------------------------------------------------------------------
-¶©ÔÄ³É½»¼ÇÂ¼     | 907       | 1005                       | ×î½ü³É½»         |
-»ñÈ¡ÅúÁ¿KÏßÊı¾İ(¿É¶©ÔÄ)   | 900           | 1000,1001 , 1002      | KÏßÍ¼          | 1000µ¥Ìõ×îĞÂkÏß£¬1001²¿·ÖÀúÊ·kÏß£¬1002ÅúÁ¿kÏßÊı¾İÍÆËÍÍê³É
-¶©ÔÄ×îĞÂµ¥ÌõKÏßÊı¾İ   | 902 | 1000                              | KÏßÍ¼          | Frequencys ¿ÉÑ¡Öµ "1", "5", "15", "30", "60", "180", "360", "720", "D", "7D"
-¶©ÔÄ24Ğ¡Ê±¹ö¶¯ĞĞÇé | 902 | 1006                           | ±Ò±Ò½»Ò×-ÊĞ³¡ĞĞÇé¡¢Ê×Ò³ | Frequencys Îª SD1
-¶©ÔÄÊĞ³¡Éî¶È     | 906             | 1003£¬1004            | ±Ò±Ò½»Ò×-×îĞÂ¼Û¸ñ    |1003Éî¶È¿ìÕÕ£¬1004Éî¶È²îÒìÊı¾İ
-¶©ÔÄ¸öÈË¶©µ¥ÏûÏ¢     | 1000                          | 1008£¬1009£¬1010 | ¸üĞÂ ±Ò±Ò½»Ò×-µ±Ç°Î¯ÍĞ |1008¶©µ¥´´½¨£¬1009¶©µ¥¸üĞÂ£¬1010¼Æ»®µ¥´¥·¢
-´íÎóĞÅÏ¢| |0|´íÎóĞÅÏ¢|
+è®¢é˜…æˆäº¤è®°å½•     | 907       | 1005                       | æœ€è¿‘æˆäº¤         |
+è·å–æ‰¹é‡Kçº¿æ•°æ®(å¯è®¢é˜…)   | 900           | 1000,1001 , 1002      | Kçº¿å›¾          | 1000å•æ¡æœ€æ–°kçº¿ï¼Œ1001éƒ¨åˆ†å†å²kçº¿ï¼Œ1002æ‰¹é‡kçº¿æ•°æ®æ¨é€å®Œæˆ
+è®¢é˜…æœ€æ–°å•æ¡Kçº¿æ•°æ®   | 902 | 1000                              | Kçº¿å›¾          | Frequencys å¯é€‰å€¼ "1", "5", "15", "30", "60", "180", "360", "720", "D", "7D"
+è®¢é˜…24å°æ—¶æ»šåŠ¨è¡Œæƒ… | 902 | 1006                           | å¸å¸äº¤æ˜“-å¸‚åœºè¡Œæƒ…ã€é¦–é¡µ | Frequencys ä¸º SD1
+è®¢é˜…å¸‚åœºæ·±åº¦     | 906             | 1003ï¼Œ1004            | å¸å¸äº¤æ˜“-æœ€æ–°ä»·æ ¼    |1003æ·±åº¦å¿«ç…§ï¼Œ1004æ·±åº¦å·®å¼‚æ•°æ®
+è®¢é˜…ä¸ªäººè®¢å•æ¶ˆæ¯     | 1000                          | 1008ï¼Œ1009ï¼Œ1010 | æ›´æ–° å¸å¸äº¤æ˜“-å½“å‰å§”æ‰˜ |1008è®¢å•åˆ›å»ºï¼Œ1009è®¢å•æ›´æ–°ï¼Œ1010è®¡åˆ’å•è§¦å‘
+é”™è¯¯ä¿¡æ¯| |0|é”™è¯¯ä¿¡æ¯|
 
 
 
-##API²Î¿¼
-###ĞĞÇéAPI
+## APIå‚è€ƒ
+### è¡Œæƒ…API
 
-¶©ÔÄ³É½»¼ÇÂ¼
+è®¢é˜…æˆäº¤è®°å½•
 
 
-** ÇëÇóÏûÏ¢ **
+**è¯·æ±‚æ¶ˆæ¯**
 
-** Â·ÓÉ£º1**
-** ÃüÁî£º907 ** 
-ÇëÇó²ÎÊı£º
+**è·¯ç”±ï¼š1**
+**å‘½ä»¤ï¼š907** 
+è¯·æ±‚å‚æ•°ï¼š
 
 ```
 message GetTopTradeList{
-    //ÊĞ³¡
+    //å¸‚åœº
     required string Market= 1 ;
-    //ÊıÁ¿
+    //æ•°é‡
     required int32 Count= 2 ;
-    //ÒÑ¶©ÔÄ
+    //å·²è®¢é˜…
     required bool Subscribe= 3 ;
 }
 ```
-²ÎÊıËµÃ÷
+å‚æ•°è¯´æ˜
 
-|²ÎÊıÃû|ÀàĞÍ|ËµÃ÷|±ØÌî|protobufĞòÁĞ|
+|å‚æ•°å|ç±»å‹|è¯´æ˜|å¿…å¡«|protobufåºåˆ—|
 |:-----  |:-----|----- |-------|----|
-|market |string   |ÊĞ³¡½»Ò×¶Ô  |ÊÇ |1|
-|Count |string   | ¶©ÔÄÊıÁ¿£¨×î´ó99Ìõ£© |ÊÇ |2|
-|subscribe |bool   |ÊÇ·ñ¶©ÔÄ  |ÊÇ |3|
+|market |string   |å¸‚åœºäº¤æ˜“å¯¹  |æ˜¯ |1|
+|Count |string   | è®¢é˜…æ•°é‡ï¼ˆæœ€å¤§99æ¡ï¼‰ |æ˜¯ |2|
+|subscribe |bool   |æ˜¯å¦è®¢é˜…  |æ˜¯ |3|
 
 
-** ½ÓÊÕÏûÏ¢ **
+**æ¥æ”¶æ¶ˆæ¯**
 
-** ÃüÁî£º1005**
+**å‘½ä»¤ï¼š1005**
 ```
 message TradeSimpleDtoList{
-    //½»Ò×Êı¾İ
+    //äº¤æ˜“æ•°æ®
     repeated TradeSimpleData List= 1 ;
 }
-//³É½»ĞÅÏ¢
+//æˆäº¤ä¿¡æ¯
 message TradeSimpleData{
-    //ÊĞ³¡
+    //å¸‚åœº
     required string Market= 1 ;
-    //³É½»Id
+    //æˆäº¤Id
     required int64 Id= 2 ;
-    //³É½»¼Û
+    //æˆäº¤ä»·
     required double Price= 3 ;
-    //³É½»Á¿
+    //æˆäº¤é‡
     required double Volume= 4 ;
-    //³É½»¶î
+    //æˆäº¤é¢
     required double Amount= 5 ;
-    //ÕÇµøÀàĞÍ
+    //æ¶¨è·Œç±»å‹
     required int32 Trend= 6 ;
-    //³É½»Ê±¼ä
+    //æˆäº¤æ—¶é—´
     required int64 CreateTime= 7 ;
 }
 ```
-|²ÎÊıÃû|ÀàĞÍ|ËµÃ÷|protobufĞòÁĞ|
+|å‚æ•°å|ç±»å‹|è¯´æ˜|protobufåºåˆ—|
 |:-----  |:-----|-----|----|
-|market |string   |ÊĞ³¡½»Ò×¶Ô  |1
+|market |string   |å¸‚åœºäº¤æ˜“å¯¹  |1
 |Id |string   | |2|
-|Price |double   |³É½»¼Û |3|
-|Volume |double   |³É½»Á¿  |4|
-|Amount |double   |³É½»½ğ¶î  |5|
-|Trend |int   |ÕÇµøÀàĞÍ£¨1ÉÏÕÇ2ÏÂµø3³ÖÆ½£©  |6|
-|CreateTime |long   |³É½»Ê±¼ä  |7|
+|Price |double   |æˆäº¤ä»· |3|
+|Volume |double   |æˆäº¤é‡  |4|
+|Amount |double   |æˆäº¤é‡‘é¢  |5|
+|Trend |int   |æ¶¨è·Œç±»å‹ï¼ˆ1ä¸Šæ¶¨2ä¸‹è·Œ3æŒå¹³ï¼‰  |6|
+|CreateTime |long   |æˆäº¤æ—¶é—´  |7|
 
 
 ----
-ÇëÇóÀúÊ·kÏß
-** ÇëÇóÏûÏ¢ **
+è¯·æ±‚å†å²kçº¿
+**è¯·æ±‚æ¶ˆæ¯**
 
-** Â·ÓÉ£º1**
-** ÃüÁî£º900 **
-ÇëÇó²ÎÊı£º
+**è·¯ç”±ï¼š1**
+**å‘½ä»¤ï¼š900**
+è¯·æ±‚å‚æ•°ï¼š
 
 ```
 message GetKLineList{
-    //ÊĞ³¡
+    //å¸‚åœº
     required string Market= 1 ;
-    //KÏßÀàĞÍ
+    //Kçº¿ç±»å‹
     required string Frequency= 2 ;
-    //¿ªÊ¼Ê±¼ä
+    //å¼€å§‹æ—¶é—´
     required int64 Start= 3 ;
-    //½áÊøÊ±¼ä
+    //ç»“æŸæ—¶é—´
     required int64 End= 4 ;
-    //ÒÑ¶©ÔÄ
+    //å·²è®¢é˜…
     required bool Subscribe= 5 [default = true];
 }
 ```
-²ÎÊıËµÃ÷
+å‚æ•°è¯´æ˜
 
-|²ÎÊıÃû|ÀàĞÍ|ËµÃ÷|±ØÌî|protobufĞòÁĞ|
+|å‚æ•°å|ç±»å‹|è¯´æ˜|å¿…å¡«|protobufåºåˆ—|
 |:-----  |:-----|----- |-------|----|
-|market |string   |ÊĞ³¡½»Ò×¶Ô  |ÊÇ |1
-|frequency |string   |Frequencys ¿ÉÑ¡Öµ ¡°1¡±, ¡°5¡±, ¡°15¡±, ¡°30¡±, ¡°60¡±, ¡°180¡±, ¡°360¡±, ¡°720¡±, ¡°D¡±, ¡°7D¡±  |ÊÇ |2|
-|start |long   |²éÑ¯¿ªÊ¼Ê±¼ä  |ÊÇ |3|
-|end |long   |²éÑ¯½áÊøÊ±¼ä  |ÊÇ |4|
-|subscribe |bool   | ÇëÇóÍêÖ®ºóÊÇ·ñ¶©ÔÄkÏß  |·ñ |5|
+|market |string   |å¸‚åœºäº¤æ˜“å¯¹  |æ˜¯ |1
+|frequency |string   |Frequencys å¯é€‰å€¼ â€œ1â€, â€œ5â€, â€œ15â€, â€œ30â€, â€œ60â€, â€œ180â€, â€œ360â€, â€œ720â€, â€œDâ€, â€œ7Dâ€  |æ˜¯ |2|
+|start |long   |æŸ¥è¯¢å¼€å§‹æ—¶é—´  |æ˜¯ |3|
+|end |long   |æŸ¥è¯¢ç»“æŸæ—¶é—´  |æ˜¯ |4|
+|subscribe |bool   | è¯·æ±‚å®Œä¹‹åæ˜¯å¦è®¢é˜…kçº¿  |å¦ |5|
 
-** ½ÓÊÕÏûÏ¢ **
+**æ¥æ”¶æ¶ˆæ¯**
 
-** ÃüÁî£º1001**
+**å‘½ä»¤ï¼š1001**
 
 ```
 message WsKLineList{
-    //KÏßÊı¾İ
+    //Kçº¿æ•°æ®
     repeated WsKLine List= 1 ;
 }
 
 message WsKLine{
-    //ÊĞ³¡
+    //å¸‚åœº
     required string Market= 1 ;
-    //KÏßÀàĞÍ
+    //Kçº¿ç±»å‹
     required string Frequency= 2 ;
-    //³É½»Á¿
+    //æˆäº¤é‡
     required double Volume= 3 ;
-    //¿ªÅÌ¼Û
+    //å¼€ç›˜ä»·
     required double OpenPrice= 4 ;
-    //ÊÕÅÌ¼Û
+    //æ”¶ç›˜ä»·
     required double ClosedPrice= 5 ;
-    //×îµÍ¼Û
+    //æœ€ä½ä»·
     required double LowPrice= 6 ;
-    //×î¸ß¼Û
+    //æœ€é«˜ä»·
     required double HighPrice= 7 ;
-    //¿ªÅÌÊ±¼ä
+    //å¼€ç›˜æ—¶é—´
     required int64 OpenTime= 8 ;
 }
 ```
-²ÎÊıËµÃ÷
+å‚æ•°è¯´æ˜
 
-|²ÎÊıÃû|ÀàĞÍ|ËµÃ÷|protobufĞòÁĞ|
+|å‚æ•°å|ç±»å‹|è¯´æ˜|protobufåºåˆ—|
 |:-----  |:-----|-----|----|
-|market |string   |ÊĞ³¡½»Ò×¶Ô  |1
-|frequency |string   |Frequencys ¿ÉÑ¡Öµ ¡°1¡±, ¡°5¡±, ¡°15¡±, ¡°30¡±, ¡°60¡±, ¡°180¡±, ¡°360¡±, ¡°720¡±, ¡°D¡±, ¡°7D¡±  |2|
-|volume |double   |³É½»Á¿ |3|
-|openPrice |double   |¿ªÅÌ¼Û  |4|
-|closedPrice |double   |ÊÕÅÌ¼Û  |5|
-|lowPrice |double   |×îµÍ¼Û  |6|
-|highPrice |double   |×î¸ß¼Û  |7|
-|openTime |long   |¿ªÅÌÊ±¼ä  |8|
+|market |string   |å¸‚åœºäº¤æ˜“å¯¹  |1
+|frequency |string   |Frequencys å¯é€‰å€¼ â€œ1â€, â€œ5â€, â€œ15â€, â€œ30â€, â€œ60â€, â€œ180â€, â€œ360â€, â€œ720â€, â€œDâ€, â€œ7Dâ€  |2|
+|volume |double   |æˆäº¤é‡ |3|
+|openPrice |double   |å¼€ç›˜ä»·  |4|
+|closedPrice |double   |æ”¶ç›˜ä»·  |5|
+|lowPrice |double   |æœ€ä½ä»·  |6|
+|highPrice |double   |æœ€é«˜ä»·  |7|
+|openTime |long   |å¼€ç›˜æ—¶é—´  |8|
 
-** ÃüÁî£º1002** //Êı¾İ½ÓÊÕÍê³É
+**å‘½ä»¤ï¼š1002** //æ•°æ®æ¥æ”¶å®Œæˆ
 ```
 message BatchSendComplate{
-    //ÊĞ³¡
+    //å¸‚åœº
     required string Market= 1 ;
-    //KÏßÀàĞÍ
+    //Kçº¿ç±»å‹
     required string Frequency= 2 ;
     //
     required int64 Start= 3 ;
     //
     required int64 End= 4 ;
-    //ÊÇ·ñµ½´ïKÏßµÄÆğµãÎ»ÖÃ
+    //æ˜¯å¦åˆ°è¾¾Kçº¿çš„èµ·ç‚¹ä½ç½®
     required bool IsStart= 5 ;
 }
 ```
-²ÎÊıËµÃ÷
+å‚æ•°è¯´æ˜
 
-|²ÎÊıÃû|ÀàĞÍ|ËµÃ÷|protobufĞòÁĞ|
+|å‚æ•°å|ç±»å‹|è¯´æ˜|protobufåºåˆ—|
 |:-----  |:-----|-----|----|
-|market |string   |ÊĞ³¡½»Ò×¶Ô |1
-|frequency |string   |Frequencys Öµ ¡°1¡±, ¡°5¡±, ¡°15¡±, ¡°30¡±, ¡°60¡±, ¡°180¡±, ¡°360¡±, ¡°720¡±, ¡°D¡±, ¡°7D¡±  |2|
-|start |long   |²éÑ¯¿ªÊ¼Ê±¼ä  |3|
-|end |long   |²éÑ¯½áÊøÊ±¼ä  |4|
-|isStart |bool   |ÊÇ·ñÒÑÈ¡ÍêËùÓĞÀúÊ·kÏß  |5|
+|market |string   |å¸‚åœºäº¤æ˜“å¯¹ |1
+|frequency |string   |Frequencys å€¼ â€œ1â€, â€œ5â€, â€œ15â€, â€œ30â€, â€œ60â€, â€œ180â€, â€œ360â€, â€œ720â€, â€œDâ€, â€œ7Dâ€  |2|
+|start |long   |æŸ¥è¯¢å¼€å§‹æ—¶é—´  |3|
+|end |long   |æŸ¥è¯¢ç»“æŸæ—¶é—´  |4|
+|isStart |bool   |æ˜¯å¦å·²å–å®Œæ‰€æœ‰å†å²kçº¿  |5|
 
 
 ----
-¶©ÔÄkÏß
+è®¢é˜…kçº¿
 
-** ÇëÇóÏûÏ¢ **
+**è¯·æ±‚æ¶ˆæ¯**
 
-** Â·ÓÉ£º1**
-** ÃüÁî£º902 ** 
-ÇëÇó²ÎÊı£º
+**è·¯ç”±ï¼š1**
+**å‘½ä»¤ï¼š902** 
+è¯·æ±‚å‚æ•°ï¼š
 
 ```
 message SubKLine{
-    //¶©ÔÄÏ¸½Ú
+    //è®¢é˜…ç»†èŠ‚
     repeated SubKLineItem Items= 1 ;
 }
-//KÏß¶©ÔÄ²ÎÊı
+//Kçº¿è®¢é˜…å‚æ•°
 message SubKLineItem{
-    //ÊĞ³¡
+    //å¸‚åœº
     required string Market= 1 ;
-    //KÏßÀàĞÍ
+    //Kçº¿ç±»å‹
     repeated string Frequencys= 2 ;
 }
 ```
-²ÎÊıËµÃ÷
+å‚æ•°è¯´æ˜
 
-|²ÎÊıÃû|ÀàĞÍ|ËµÃ÷|±ØÌî|protobufĞòÁĞ|
+|å‚æ•°å|ç±»å‹|è¯´æ˜|å¿…å¡«|protobufåºåˆ—|
 |:-----  |:-----|----- |-------|----|
-|market |string   |ÊĞ³¡½»Ò×¶Ô  |ÊÇ |1
-|frequency |string   |Frequencys ¿ÉÑ¡Öµ ¡°1¡±, ¡°5¡±, ¡°15¡±, ¡°30¡±, ¡°60¡±, ¡°180¡±, ¡°360¡±, ¡°720¡±, ¡°D¡±, ¡°7D¡±  |ÊÇ |2|
+|market |string   |å¸‚åœºäº¤æ˜“å¯¹  |æ˜¯ |1
+|frequency |string   |Frequencys å¯é€‰å€¼ â€œ1â€, â€œ5â€, â€œ15â€, â€œ30â€, â€œ60â€, â€œ180â€, â€œ360â€, â€œ720â€, â€œDâ€, â€œ7Dâ€  |æ˜¯ |2|
 
 
-** ½ÓÊÕÏûÏ¢ **
+**æ¥æ”¶æ¶ˆæ¯**
 
-** ÃüÁî£º1000**
+**å‘½ä»¤ï¼š1000**
 ```
 message WsKLine{
-    //ÊĞ³¡
+    //å¸‚åœº
     required string Market= 1 ;
-    //KÏßÀàĞÍ
+    //Kçº¿ç±»å‹
     required string Frequency= 2 ;
-    //³É½»Á¿
+    //æˆäº¤é‡
     required double Volume= 3 ;
-    //¿ªÅÌ¼Û
+    //å¼€ç›˜ä»·
     required double OpenPrice= 4 ;
-    //ÊÕÅÌ¼Û
+    //æ”¶ç›˜ä»·
     required double ClosedPrice= 5 ;
-    //×îµÍ¼Û
+    //æœ€ä½ä»·
     required double LowPrice= 6 ;
-    //×î¸ß¼Û
+    //æœ€é«˜ä»·
     required double HighPrice= 7 ;
-    //¿ªÅÌÊ±¼ä
+    //å¼€ç›˜æ—¶é—´
     required int64 OpenTime= 8 ;
 }
 ```
-|²ÎÊıÃû|ÀàĞÍ|ËµÃ÷|protobufĞòÁĞ|
+|å‚æ•°å|ç±»å‹|è¯´æ˜|protobufåºåˆ—|
 |:-----  |:-----|-----|----|
-|market |string   |ÊĞ³¡½»Ò×¶Ô  |1
-|frequency |string   |Frequencys ¿ÉÑ¡Öµ ¡°1¡±, ¡°5¡±, ¡°15¡±, ¡°30¡±, ¡°60¡±, ¡°180¡±, ¡°360¡±, ¡°720¡±, ¡°D¡±, ¡°7D¡±  |2|
-|volume |double   |³É½»Á¿ |3|
-|openPrice |double   |¿ªÅÌ¼Û  |4|
-|closedPrice |double   |ÊÕÅÌ¼Û  |5|
-|lowPrice |double   |×îµÍ¼Û  |6|
-|highPrice |double   |×î¸ß¼Û  |7|
-|openTime |long   |¿ªÅÌÊ±¼ä  |8|
+|market |string   |å¸‚åœºäº¤æ˜“å¯¹  |1
+|frequency |string   |Frequencys å¯é€‰å€¼ â€œ1â€, â€œ5â€, â€œ15â€, â€œ30â€, â€œ60â€, â€œ180â€, â€œ360â€, â€œ720â€, â€œDâ€, â€œ7Dâ€  |2|
+|volume |double   |æˆäº¤é‡ |3|
+|openPrice |double   |å¼€ç›˜ä»·  |4|
+|closedPrice |double   |æ”¶ç›˜ä»·  |5|
+|lowPrice |double   |æœ€ä½ä»·  |6|
+|highPrice |double   |æœ€é«˜ä»·  |7|
+|openTime |long   |å¼€ç›˜æ—¶é—´  |8|
 
 ----
 
-¶©ÔÄ24Ğ¡Ê±¹ö¶¯ĞĞÇé
+è®¢é˜…24å°æ—¶æ»šåŠ¨è¡Œæƒ…
 
-** ÇëÇóÏûÏ¢ **
+**è¯·æ±‚æ¶ˆæ¯**
 
-** Â·ÓÉ£º1**
-** ÃüÁî£º902 **
-ÇëÇó²ÎÊı£º
+**è·¯ç”±ï¼š1**
+**å‘½ä»¤ï¼š902**
+è¯·æ±‚å‚æ•°ï¼š
 
 ```
 message SubKLine{
-    //¶©ÔÄÏ¸½Ú
+    //è®¢é˜…ç»†èŠ‚
     repeated SubKLineItem Items= 1 ;
 }
-//KÏß¶©ÔÄ²ÎÊı
+//Kçº¿è®¢é˜…å‚æ•°
 message SubKLineItem{
-    //ÊĞ³¡
+    //å¸‚åœº
     required string Market= 1 ;
-    //KÏßÀàĞÍ
+    //Kçº¿ç±»å‹
     repeated string Frequencys= 2 ;
 }
 ```
-²ÎÊıËµÃ÷
+å‚æ•°è¯´æ˜
 
-|²ÎÊıÃû|ÀàĞÍ|ËµÃ÷|±ØÌî|protobufĞòÁĞ|
+|å‚æ•°å|ç±»å‹|è¯´æ˜|å¿…å¡«|protobufåºåˆ—|
 |:-----  |:-----|----- |-------|----|
-|market |string   |ÊĞ³¡½»Ò×¶Ô  |ÊÇ |1
-|frequency |string   |FrequencysµÄÖµÖ»ÄÜÎªSD1£¨ÎªÁËÓëÕı³£kÏßÇø·Ö£© |ÊÇ |2|
+|market |string   |å¸‚åœºäº¤æ˜“å¯¹  |æ˜¯ |1
+|frequency |string   |Frequencysçš„å€¼åªèƒ½ä¸ºSD1ï¼ˆä¸ºäº†ä¸æ­£å¸¸kçº¿åŒºåˆ†ï¼‰ |æ˜¯ |2|
 
 
-** ½ÓÊÕÏûÏ¢ **
+**æ¥æ”¶æ¶ˆæ¯**
 
-** ÃüÁî£º1000**
+**å‘½ä»¤ï¼š1000**
 ```
 message WsKLine{
-    //ÊĞ³¡
+    //å¸‚åœº
     required string Market= 1 ;
-    //KÏßÀàĞÍ
+    //Kçº¿ç±»å‹
     required string Frequency= 2 ;
-    //³É½»Á¿
+    //æˆäº¤é‡
     required double Volume= 3 ;
-    //¿ªÅÌ¼Û
+    //å¼€ç›˜ä»·
     required double OpenPrice= 4 ;
-    //ÊÕÅÌ¼Û
+    //æ”¶ç›˜ä»·
     required double ClosedPrice= 5 ;
-    //×îµÍ¼Û
+    //æœ€ä½ä»·
     required double LowPrice= 6 ;
-    //×î¸ß¼Û
+    //æœ€é«˜ä»·
     required double HighPrice= 7 ;
-    //¿ªÅÌÊ±¼ä
+    //å¼€ç›˜æ—¶é—´
     required int64 OpenTime= 8 ;
 }
 ```
-|²ÎÊıÃû|ÀàĞÍ|ËµÃ÷|protobufĞòÁĞ|
+|å‚æ•°å|ç±»å‹|è¯´æ˜|protobufåºåˆ—|
 |:-----  |:-----|-----|----|
-|market |string   |ÊĞ³¡½»Ò×¶Ô  |1
-|frequency |string   |Frequencys ¿ÉÑ¡Öµ ¡°1¡±, ¡°5¡±, ¡°15¡±, ¡°30¡±, ¡°60¡±, ¡°180¡±, ¡°360¡±, ¡°720¡±, ¡°D¡±, ¡°7D¡±  |2|
-|volume |double   |³É½»Á¿ |3|
-|openPrice |double   |¿ªÅÌ¼Û  |4|
-|closedPrice |double   |ÊÕÅÌ¼Û  |5|
-|lowPrice |double   |×îµÍ¼Û  |6|
-|highPrice |double   |×î¸ß¼Û  |7|
-|openTime |long   |¿ªÅÌÊ±¼ä  |8|
+|market |string   |å¸‚åœºäº¤æ˜“å¯¹  |1
+|frequency |string   |Frequencys å¯é€‰å€¼ â€œ1â€, â€œ5â€, â€œ15â€, â€œ30â€, â€œ60â€, â€œ180â€, â€œ360â€, â€œ720â€, â€œDâ€, â€œ7Dâ€  |2|
+|volume |double   |æˆäº¤é‡ |3|
+|openPrice |double   |å¼€ç›˜ä»·  |4|
+|closedPrice |double   |æ”¶ç›˜ä»·  |5|
+|lowPrice |double   |æœ€ä½ä»·  |6|
+|highPrice |double   |æœ€é«˜ä»·  |7|
+|openTime |long   |å¼€ç›˜æ—¶é—´  |8|
 
 
 ----
 
-¶©ÔÄÊĞ³¡Éî¶È
+è®¢é˜…å¸‚åœºæ·±åº¦
 
-Éî¶È¶©ÔÄÎª²îÒìÊı¾İÍÆËÍ£¬µÚÒ»´Î¶©ÔÄ»á·µ»ØÈ«Á¿Êı¾İ£¬Ö®ºóÖ»ÍÆËÍ²îÒìÊı¾İ
+æ·±åº¦è®¢é˜…ä¸ºå·®å¼‚æ•°æ®æ¨é€ï¼Œç¬¬ä¸€æ¬¡è®¢é˜…ä¼šè¿”å›å…¨é‡æ•°æ®ï¼Œä¹‹ååªæ¨é€å·®å¼‚æ•°æ®
 
-²îÒì±È½Ï·½·¨£º1.ĞÂ³öÏÖµÄ¼Û¸ñ£¬±íÊ¾ĞÂÔöÉî¶È¡£2.ÒÑ³öÏÖµÄ¼Û¸ñ£¬¹Òµ¥Êı²»Îª0£¬±íÊ¾¸üĞÂ.3.ÒÑ³öÏÖµÄ¼Û¸ñ£¬¹Òµ¥ÊıÎª0£¬±íÊ¾É¾³ı´ËÉî¶È¡£=====ÈôStartVersionºÍÊĞ³¡Éî¶È¿ìÕÕµÄ°æ±¾²»Í¬£¬ĞèÒªÖØĞÂ»ñÈ¡ÊĞ³¡Éî¶È¿ìÕÕ
+å·®å¼‚æ¯”è¾ƒæ–¹æ³•ï¼š1.æ–°å‡ºç°çš„ä»·æ ¼ï¼Œè¡¨ç¤ºæ–°å¢æ·±åº¦ã€‚2.å·²å‡ºç°çš„ä»·æ ¼ï¼ŒæŒ‚å•æ•°ä¸ä¸º0ï¼Œè¡¨ç¤ºæ›´æ–°.3.å·²å‡ºç°çš„ä»·æ ¼ï¼ŒæŒ‚å•æ•°ä¸º0ï¼Œè¡¨ç¤ºåˆ é™¤æ­¤æ·±åº¦ã€‚=====è‹¥StartVersionå’Œå¸‚åœºæ·±åº¦å¿«ç…§çš„ç‰ˆæœ¬ä¸åŒï¼Œéœ€è¦é‡æ–°è·å–å¸‚åœºæ·±åº¦å¿«ç…§
 
-** ÇëÇóÏûÏ¢ **
+**è¯·æ±‚æ¶ˆæ¯**
 
-** Â·ÓÉ£º1**
-** ÃüÁî£º906 **
-ÇëÇó²ÎÊı£º
+**è·¯ç”±ï¼š1**
+**å‘½ä»¤ï¼š906**
+è¯·æ±‚å‚æ•°ï¼š
 
 ```
 message SubMarketDepth{
-    //ÊĞ³¡
+    //å¸‚åœº
     required string Market= 1 ;
-    //Ğ¡ÊıÎ»¾«¶È
+    //å°æ•°ä½ç²¾åº¦
     required int32 Precision= 2 ;
-    //»ñÈ¡ÌõÊı£¬¿ÉÑ¡ÖµÎª£º10,20,40
+    //è·å–æ¡æ•°ï¼Œå¯é€‰å€¼ä¸ºï¼š10,20,40
     required int32 Limit= 3 ;
 }
 ```
-²ÎÊıËµÃ÷
+å‚æ•°è¯´æ˜
 
-|²ÎÊıÃû|ÀàĞÍ|ËµÃ÷|±ØÌî|protobufĞòÁĞ|
+|å‚æ•°å|ç±»å‹|è¯´æ˜|å¿…å¡«|protobufåºåˆ—|
 |:-----  |:-----|----- |-------|----|
-|market |string   |ÊĞ³¡½»Ò×¶Ô  |ÊÇ |1
-|precision |int   |Ğ¡ÊıÎ»¾«¶È |ÊÇ |2|
-|limit |int   |»ñÈ¡ÌõÊı£¬¿ÉÑ¡ÖµÎª£º10,20,40 |ÊÇ |3|
+|market |string   |å¸‚åœºäº¤æ˜“å¯¹  |æ˜¯ |1
+|precision |int   |å°æ•°ä½ç²¾åº¦ |æ˜¯ |2|
+|limit |int   |è·å–æ¡æ•°ï¼Œå¯é€‰å€¼ä¸ºï¼š10,20,40 |æ˜¯ |3|
 
 
-** ½ÓÊÕÏûÏ¢ **
+**æ¥æ”¶æ¶ˆæ¯**
 
-** ÃüÁî£º1003** //Éî¶È¿ìÕÕ£¬µÚÒ»´Î¶©ÔÄÊ±»áÍÆËÍÒ»´Î
+**å‘½ä»¤ï¼š1003** //æ·±åº¦å¿«ç…§ï¼Œç¬¬ä¸€æ¬¡è®¢é˜…æ—¶ä¼šæ¨é€ä¸€æ¬¡
 ```
 message MarketDepthList{
-    //ÊĞ³¡Éî¶ÈÁĞ±í
+    //å¸‚åœºæ·±åº¦åˆ—è¡¨
     repeated MarketDepthDto List= 1 ;
 }
-//ÊĞ³¡Éî¶È¿ìÕÕ
+//å¸‚åœºæ·±åº¦å¿«ç…§
 message MarketDepthDto{
-    //ÊĞ³¡
+    //å¸‚åœº
     required string Market= 1 ;
-    //¾«¶È
+    //ç²¾åº¦
     required int32 Precision= 2 ;
-    //Âôµ¥ÁĞ±í
+    //å–å•åˆ—è¡¨
     repeated MarketDepth AskList= 3 ;
-    //Âòµ¥ÁĞ±í
+    //ä¹°å•åˆ—è¡¨
     repeated MarketDepth BidList= 4 ;
-    //°æ±¾ºÅ
+    //ç‰ˆæœ¬å·
     required int64 Version= 5 ;
 }
 message MarketDepth{
-    //µ¥¼Û
+    //å•ä»·
     required double P= 1 ;
-    //ÊıÁ¿
+    //æ•°é‡
     required double V= 2 ;
 }
 ```
-|²ÎÊıÃû|ÀàĞÍ|ËµÃ÷|protobufĞòÁĞ|
+|å‚æ•°å|ç±»å‹|è¯´æ˜|protobufåºåˆ—|
 |:-----  |:-----|-----|---|
-|market |string   |ÊĞ³¡½»Ò×¶Ô  |1
-|precision |string   |ÊĞ³¡¾«¶È  |2
-|askList |array   |µ¥¼Û |3
-|bidList |array   |ÊıÁ¿  |4
-|version |long   |°æ±¾ºÅ  |5
-|p |double   |µ¥¼Û  |1
-|v |double   |ÊıÁ¿  |2
+|market |string   |å¸‚åœºäº¤æ˜“å¯¹  |1
+|precision |string   |å¸‚åœºç²¾åº¦  |2
+|askList |array   |å•ä»· |3
+|bidList |array   |æ•°é‡  |4
+|version |long   |ç‰ˆæœ¬å·  |5
+|p |double   |å•ä»·  |1
+|v |double   |æ•°é‡  |2
 
 
-** ÃüÁî£º1004** //Éî¶È²îÒì
+**å‘½ä»¤ï¼š1004** //æ·±åº¦å·®å¼‚
 
 ```
-//ÊĞ³¡Éî¶È²îÒìĞÅÏ¢¡£²îÒì±È½Ï·½·¨£º1.ĞÂ³öÏÖµÄ¼Û¸ñ£¬±íÊ¾ĞÂÔöÉî¶È¡£2.ÒÑ³öÏÖµÄ¼Û¸ñ£¬¹Òµ¥Êı²»Îª0£¬±íÊ¾¸üĞÂ.3.ÒÑ³öÏÖµÄ¼Û¸ñ£¬¹Òµ¥ÊıÎª0£¬±íÊ¾É¾³ı´ËÉî¶È¡£=====ÈôStartVersionºÍÊĞ³¡Éî¶È¿ìÕÕµÄ°æ±¾²»Í¬£¬ĞèÒªÖØĞÂ»ñÈ¡ÊĞ³¡Éî¶È¿ìÕÕ
+//å¸‚åœºæ·±åº¦å·®å¼‚ä¿¡æ¯ã€‚å·®å¼‚æ¯”è¾ƒæ–¹æ³•ï¼š1.æ–°å‡ºç°çš„ä»·æ ¼ï¼Œè¡¨ç¤ºæ–°å¢æ·±åº¦ã€‚2.å·²å‡ºç°çš„ä»·æ ¼ï¼ŒæŒ‚å•æ•°ä¸ä¸º0ï¼Œè¡¨ç¤ºæ›´æ–°.3.å·²å‡ºç°çš„ä»·æ ¼ï¼ŒæŒ‚å•æ•°ä¸º0ï¼Œè¡¨ç¤ºåˆ é™¤æ­¤æ·±åº¦ã€‚=====è‹¥StartVersionå’Œå¸‚åœºæ·±åº¦å¿«ç…§çš„ç‰ˆæœ¬ä¸åŒï¼Œéœ€è¦é‡æ–°è·å–å¸‚åœºæ·±åº¦å¿«ç…§
 message MarketDepthDiff{
-    //ÊĞ³¡
+    //å¸‚åœº
     required string Market= 1 ;
-    //¾«¶È
+    //ç²¾åº¦
     required int32 Precision= 2 ;
-    //Âôµ¥²îÒìÁĞ±í
+    //å–å•å·®å¼‚åˆ—è¡¨
     repeated MarketDepth AskList= 3 ;
-    //Âòµ¥²îÒìÁĞ±í
+    //ä¹°å•å·®å¼‚åˆ—è¡¨
     repeated MarketDepth BidList= 4 ;
-    //ÆğÊ¼°æ±¾ºÅ
+    //èµ·å§‹ç‰ˆæœ¬å·
     required int64 StartVersion= 5 ;
-    //½ØÖ¹°æ±¾ºÅ
+    //æˆªæ­¢ç‰ˆæœ¬å·
     required int64 EndVersion= 6 ;
 }
 message MarketDepth{
-    //µ¥¼Û
+    //å•ä»·
     required double P= 1 ;
-    //ÊıÁ¿
+    //æ•°é‡
     required double V= 2 ;
 }
 ```
 
 
-|²ÎÊıÃû|ÀàĞÍ|ËµÃ÷|protobufĞòÁĞ|
+|å‚æ•°å|ç±»å‹|è¯´æ˜|protobufåºåˆ—|
 |:-----  |:-----|-----|----|
-|market |string   |ÊĞ³¡½»Ò×¶Ô  |1
-|precision |string   |ÊĞ³¡¾«¶È  |2|
-|askList |array   |ÂôÅÌ |3|
-|bidList |array   |ÂòÅÌ  |4|
-|startVersion |double   |ÆğÊ¼°æ±¾ºÅ  |5|
-|endVersion |double   |µ±Ç°°æ±¾ºÅ  |6|
-|p |double   |¼Û¸ñ  |1|
-|v |double   |ÊıÁ¿  |2|
+|market |string   |å¸‚åœºäº¤æ˜“å¯¹  |1
+|precision |string   |å¸‚åœºç²¾åº¦  |2|
+|askList |array   |å–ç›˜ |3|
+|bidList |array   |ä¹°ç›˜  |4|
+|startVersion |double   |èµ·å§‹ç‰ˆæœ¬å·  |5|
+|endVersion |double   |å½“å‰ç‰ˆæœ¬å·  |6|
+|p |double   |ä»·æ ¼  |1|
+|v |double   |æ•°é‡  |2|
 
 ----
 
-###¸öÈËAPI
+### ä¸ªäººAPI
 
-Ë½ÈËapiÃ¿´ÎÇëÇó¶¼ĞèÒª¹¹½¨Ò»¸öÇ©Ãû²ÎÊısignÓëÒ»¸öAuthorizationµÄ²ÎÊı
+ç§äººapiæ¯æ¬¡è¯·æ±‚éƒ½éœ€è¦æ„å»ºä¸€ä¸ªç­¾åå‚æ•°signä¸ä¸€ä¸ªAuthorizationçš„å‚æ•°
 
-###Ç©Ãû
+### ç­¾å
 
-»ñÈ¡api£ºÇëÔÚÕËºÅÉèÖÃ->Api¹ÜÀí->´´½¨api£¬´´½¨Íê³ÉÖ®ºó»áÉú³ÉÒ»¸öApikeyºÍSecrect Key,ÇëÍ×ÉÆ¹ÜÀí£¬ ** ÖØÒªÌáÊ¾£ºÕâÁ½¸öÃÜÔ¿ÓëÕËºÅ°²È«½ôÃÜÏà¹Ø£¬ÎŞÂÛºÎÊ±¶¼ÇëÎğÏòÆäËûÈËÍ¸Â¶¡£**
+è·å–apiï¼šè¯·åœ¨è´¦å·è®¾ç½®->Apiç®¡ç†->åˆ›å»ºapiï¼Œåˆ›å»ºå®Œæˆä¹‹åä¼šç”Ÿæˆä¸€ä¸ªApikeyå’ŒSecrect Key,è¯·å¦¥å–„ç®¡ç†ï¼Œ **é‡è¦æç¤ºï¼šè¿™ä¸¤ä¸ªå¯†é’¥ä¸è´¦å·å®‰å…¨ç´§å¯†ç›¸å…³ï¼Œæ— è®ºä½•æ—¶éƒ½è¯·å‹¿å‘å…¶ä»–äººé€éœ²ã€‚**
 
-** ApikeyÓÃÀ´±êÊ¶ÓÃ»§£¬ÔÚwsÁ¬½Óºó¼ÓÉÏAuthorization=Apikey²ÎÊı **
+**Apikeyç”¨æ¥æ ‡è¯†ç”¨æˆ·ï¼Œåœ¨wsè¿æ¥ååŠ ä¸ŠAuthorization=Apikeyå‚æ•°**
 
 
-** Secrect KeyÓÃÀ´Éú³Ésign²ÎÊı **
+**Secrect Keyç”¨æ¥ç”Ÿæˆsignå‚æ•°**
 
-** sign Éú³É·½·¨: ** Ê¹ÓÃSecrect Key×÷ÎªÃÜÔ¿£¬Authorization=ApikeyÎªÖµ½øĞĞ HmacSHA256 ¼ÆËãµÃ³ö
+**sign ç”Ÿæˆæ–¹æ³•:** ä½¿ç”¨Secrect Keyä½œä¸ºå¯†é’¥ï¼ŒAuthorization=Apikeyä¸ºå€¼è¿›è¡Œ HmacSHA256 è®¡ç®—å¾—å‡º
 
-Àı
+ä¾‹
 
-APIKey=81.67AAA2F6041D408D9868387A8904431D£¬Authorization²ÎÊıÈçÏÂ
+APIKey=81.67AAA2F6041D408D9868387A8904431Dï¼ŒAuthorizationå‚æ•°å¦‚ä¸‹
 
 ```
 Authorization=81.67AAA2F6041D408D9868387A8904431D
 ```
 
-ÈçSecrect KeyÎª 2288987EFDB54F848D7BACCE1288FC9A£¬Ôò¼ÆËãµÃ³ösignÖµÎª
+å¦‚Secrect Keyä¸º 2288987EFDB54F848D7BACCE1288FC9Aï¼Œåˆ™è®¡ç®—å¾—å‡ºsignå€¼ä¸º
 ```
 57c4c6770d565aa236f87706053bd51512862443062e471bd3243a6ed8eef2
 ```
-×îÖÕÉú³ÉµÄwsµØÖ·£º
+æœ€ç»ˆç”Ÿæˆçš„wsåœ°å€ï¼š
 wss://api.azex.io?Authorization=81.67AAA2F6041D408D9868387A8904431D&sign=57c4c6770d565aa236f87706053bd51512862443062e471bd3243a6ed8eef2
 
 
 ----
-¶©ÔÄ¸öÈË¶©µ¥£¨¶©µ¥´´½¨ÏûÏ¢£¬¶©µ¥¸üĞÂÏûÏ¢£¬¼Æ»®µ¥´¥·¢ÏûÏ¢£©
+è®¢é˜…ä¸ªäººè®¢å•ï¼ˆè®¢å•åˆ›å»ºæ¶ˆæ¯ï¼Œè®¢å•æ›´æ–°æ¶ˆæ¯ï¼Œè®¡åˆ’å•è§¦å‘æ¶ˆæ¯ï¼‰
 
-** ÇëÇóÏûÏ¢ **
+**è¯·æ±‚æ¶ˆæ¯**
 
-** Â·ÓÉ£º1**
-** ÃüÁî£º1000 **
-ÇëÇó²ÎÊı£º
+**è·¯ç”±ï¼š1**
+**å‘½ä»¤ï¼š1000**
+è¯·æ±‚å‚æ•°ï¼š
 
 ```
-//µÇÂ¼ÊĞ³¡
+//ç™»å½•å¸‚åœº
 message LoginToMarket{
-    //ÊĞ³¡
+    //å¸‚åœº
     required string Market= 1 ;
 }
 ```
-²ÎÊıËµÃ÷
+å‚æ•°è¯´æ˜
 
-|²ÎÊıÃû|ÀàĞÍ|ËµÃ÷|±ØÌî|protobufĞòÁĞ|
+|å‚æ•°å|ç±»å‹|è¯´æ˜|å¿…å¡«|protobufåºåˆ—|
 |:-----  |:-----|----- |-------|----|
-|market |string   |ÊĞ³¡½»Ò×¶Ô  |ÊÇ |1
+|market |string   |å¸‚åœºäº¤æ˜“å¯¹  |æ˜¯ |1
 
 
 
-** ½ÓÊÕÏûÏ¢ **
+**æ¥æ”¶æ¶ˆæ¯**
 
-** ÃüÁî£º1008** //ĞÂÔö¶©µ¥ÏûÏ¢
+**å‘½ä»¤ï¼š1008** //æ–°å¢è®¢å•æ¶ˆæ¯
 ```
-//¶©µ¥ĞÅÏ¢
+//è®¢å•ä¿¡æ¯
 message OrderInfoDto{
-    //¶©µ¥Id
+    //è®¢å•Id
     required string Id= 1 ;
-    //ÓÃ»§Id
+    //ç”¨æˆ·Id
     required int64 UserId= 2 ;
-    //±ÒÖÖ
+    //å¸ç§
     required string Currency= 3 ;
-    //ÊÖĞø·Ñ±ÒÖÖ
+    //æ‰‹ç»­è´¹å¸ç§
     required string FeeCurrency= 4 ;
-    //ÊĞ³¡
+    //å¸‚åœº
     required string Market= 5 ;
-    //¶©µ¥·ÖÀà
+    //è®¢å•åˆ†ç±»
     required int32 Category= 6 ;
-    //ÂòÂôÀà±ğ
+    //ä¹°å–ç±»åˆ«
     required int32 OrderType= 7 ;
-    //¼Æ»®µ¥Àà±ğ
+    //è®¡åˆ’å•ç±»åˆ«
     required int32 PlanType= 8 ;
-    //´¥·¢¼Û¸ñ
+    //è§¦å‘ä»·æ ¼
     required double TriggerPrice= 9 ;
-    //ÏŞ¼Ûµ¥µ¥¼Û
+    //é™ä»·å•å•ä»·
     required double Price= 10 ;
-    //ÏŞ¼Ûµ¥ÊıÁ¿
+    //é™ä»·å•æ•°é‡
     required double Volume= 11 ;
-    //ÊĞ¼Ûµ¥½ğ¶î
+    //å¸‚ä»·å•é‡‘é¢
     required double Amount= 12 ;
-    //¶©µ¥×´Ì¬
+    //è®¢å•çŠ¶æ€
     required int32 Status= 13 ;
-    //´´½¨Ê±¼ä
+    //åˆ›å»ºæ—¶é—´
     required int64 CreateTime= 14 ;
 }
 
 ```
-²ÎÊıËµÃ÷
+å‚æ•°è¯´æ˜
 
-|²ÎÊıÃû|ÀàĞÍ|ËµÃ÷|protobufĞòÁĞ|
+|å‚æ•°å|ç±»å‹|è¯´æ˜|protobufåºåˆ—|
 |:-----  |:-----|-----|----|
-|id |string   |¶©µ¥id  |1
-|userId |long   |ÓÃ»§id  |2|
-|currency |string   |±ÒÖÖ |3|
-|feeCurrency |string   |ÊÖĞø·Ñ±ÒÖÖ  |4|
-|market |string   |ÊĞ³¡  |5|
-|category |int   |¶©µ¥·ÖÀà£¨1·Ç¼Æ»®¶©µ¥£¬2¼Æ»®¶©µ¥£©  |6|
-|orderType |int   |¶©µ¥ÀàĞÍ£¨1ÏŞ¼ÛÂòµ¥2ÊĞ¼ÛÂòµ¥3ÏŞ¼ÛÂôµ¥4ÊĞ¼ÛÂôµ¥£©  |7|
-|planType |int   |¼Æ»®µ¥Àà±ğ£¨1¸ß¼Û´¥·¢2µÍ¼Û´¥·¢£©  |8|
-|triggerPrice |double   |´¥·¢¼Û  |9|
-|price |double   |¹Òµ¥¼Û  |10|
-|volume |double   |¹Òµ¥ÊıÁ¿  |11|
-|amount |double   |¹Òµ¥½ğ¶î  |12|
-|status |int   |¶©µ¥×´Ì¬  |13|
-|createTime |long   |´´½¨Ê±¼ä  |14|
+|id |string   |è®¢å•id  |1
+|userId |long   |ç”¨æˆ·id  |2|
+|currency |string   |å¸ç§ |3|
+|feeCurrency |string   |æ‰‹ç»­è´¹å¸ç§  |4|
+|market |string   |å¸‚åœº  |5|
+|category |int   |è®¢å•åˆ†ç±»ï¼ˆ1éè®¡åˆ’è®¢å•ï¼Œ2è®¡åˆ’è®¢å•ï¼‰  |6|
+|orderType |int   |è®¢å•ç±»å‹ï¼ˆ1é™ä»·ä¹°å•2å¸‚ä»·ä¹°å•3é™ä»·å–å•4å¸‚ä»·å–å•ï¼‰  |7|
+|planType |int   |è®¡åˆ’å•ç±»åˆ«ï¼ˆ1é«˜ä»·è§¦å‘2ä½ä»·è§¦å‘ï¼‰  |8|
+|triggerPrice |double   |è§¦å‘ä»·  |9|
+|price |double   |æŒ‚å•ä»·  |10|
+|volume |double   |æŒ‚å•æ•°é‡  |11|
+|amount |double   |æŒ‚å•é‡‘é¢  |12|
+|status |int   |è®¢å•çŠ¶æ€  |13|
+|createTime |long   |åˆ›å»ºæ—¶é—´  |14|
 
-** ÃüÁî£º1009** //¸üĞÂ¶©µ¥ÏûÏ¢
+**å‘½ä»¤ï¼š1009** //æ›´æ–°è®¢å•æ¶ˆæ¯
 ```
-//¸üĞÂ¶©µ¥ĞÅÏ¢
+//æ›´æ–°è®¢å•ä¿¡æ¯
 message UpdateOrderInfo{
-    //×î¸ß¼Û
+    //æœ€é«˜ä»·
     required string Market= 1 ;
-    //¶©µ¥Id
+    //è®¢å•Id
     required string OrderId= 2 ;
-    //½»Ò×Á¿
+    //äº¤æ˜“é‡
     required double TxVolume= 3 ;
-    //½»Ò×¶î
+    //äº¤æ˜“é¢
     required double TxAmount= 4 ;
-    //¶©µ¥×´Ì¬
+    //è®¢å•çŠ¶æ€
     required int32 Status= 5 ;
-    //¸üĞÂÊ±¼ä
+    //æ›´æ–°æ—¶é—´
     required int64 UpdateTime= 6 ;
 }
 
 ```
-²ÎÊıËµÃ÷
+å‚æ•°è¯´æ˜
 
-|²ÎÊıÃû|ÀàĞÍ|ËµÃ÷|protobufĞòÁĞ|
+|å‚æ•°å|ç±»å‹|è¯´æ˜|protobufåºåˆ—|
 |:-----  |:-----|-----|----|
-|market |string   |ÊĞ³¡½»Ò×¶Ô  |1
-|orderId |string   |¶©µ¥id  |2|
-|txVolume |double   |½»Ò×Á¿ |3|
-|txAmount |double   |½»Ò×½ğ¶î  |4|
-|status |int   |¶©µ¥×´Ì¬£¨2½»Ò×ÖĞ3¶©µ¥ÒÑÍê³É4ÒÑÈ¡Ïû£©  |5|
-|updateTime |long   |¸üĞÂÊ±¼ä  |6|
+|market |string   |å¸‚åœºäº¤æ˜“å¯¹  |1
+|orderId |string   |è®¢å•id  |2|
+|txVolume |double   |äº¤æ˜“é‡ |3|
+|txAmount |double   |äº¤æ˜“é‡‘é¢  |4|
+|status |int   |è®¢å•çŠ¶æ€ï¼ˆ2äº¤æ˜“ä¸­3è®¢å•å·²å®Œæˆ4å·²å–æ¶ˆï¼‰  |5|
+|updateTime |long   |æ›´æ–°æ—¶é—´  |6|
 
-** ÃüÁî£º1010** //¼Æ»®µ¥´¥·¢ÏûÏ¢
+**å‘½ä»¤ï¼š1010** //è®¡åˆ’å•è§¦å‘æ¶ˆæ¯
 ```
 message PlanOrderTrigger{
-    //ÊĞ³¡
+    //å¸‚åœº
     required string Market= 1 ;
-    //¼Æ»®¶©µ¥ID
+    //è®¡åˆ’è®¢å•ID
     required string Id= 2 ;
-    //´¥·¢¼Û¸ñ
+    //è§¦å‘ä»·æ ¼
     required double Price= 3 ;
-    //ÓÃ»§Id
+    //ç”¨æˆ·Id
     required int64 UserId= 4 ;
 }
 
 ```
-²ÎÊıËµÃ÷
+å‚æ•°è¯´æ˜
 
-|²ÎÊıÃû|ÀàĞÍ|ËµÃ÷|protobufĞòÁĞ|
+|å‚æ•°å|ç±»å‹|è¯´æ˜|protobufåºåˆ—|
 |:-----  |:-----|-----|----|
-|market |string   |ÊĞ³¡½»Ò×¶Ô  |1
-|id |string   |¼Æ»®µ¥id |2|
-|price |double   |´¥·¢¼Û¸ñ |3|
-|userId |double   |ÓÃ»§id  |4|
+|market |string   |å¸‚åœºäº¤æ˜“å¯¹  |1
+|id |string   |è®¡åˆ’å•id |2|
+|price |double   |è§¦å‘ä»·æ ¼ |3|
+|userId |double   |ç”¨æˆ·id  |4|
 
 ----
 
-´íÎóĞÅÏ¢ÏûÏ¢
+é”™è¯¯ä¿¡æ¯æ¶ˆæ¯
 
-** ½ÓÊÕÏûÏ¢ **
-** ÃüÁî£º0** 
+**æ¥æ”¶æ¶ˆæ¯**
+**å‘½ä»¤ï¼š0** 
 ```
 message WsError{
-    //´íÎóÂë
+    //é”™è¯¯ç 
     required int32 Code= 1 ;
-    //´íÎóÌáÊ¾
+    //é”™è¯¯æç¤º
     required string Message= 2 ;
 }
 ```
