@@ -507,8 +507,8 @@ message MarketDepth{
 
 私人api每次请求都需要构建一个签名参数sign与一个Authorization的参数
 
-<span id="sign">
-### 签名</span>
+
+### 签名
 
 获取api：请在账号设置->Api管理->创建api，创建完成之后会生成一个Apikey和Secrect Key,请妥善管理， **重要提示：这两个密钥与账号安全紧密相关，无论何时都请勿向其他人透露。**
 
