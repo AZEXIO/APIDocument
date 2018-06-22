@@ -3,7 +3,7 @@
 ## 使用说明
 
 
-API 域名：https://api.azex.io
+API 域名：https://openapi.azex.io
 
 
 

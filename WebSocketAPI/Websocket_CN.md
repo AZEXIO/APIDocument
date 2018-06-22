@@ -3,7 +3,7 @@
 ## 使用说明
 
 
-域名：wss://ws.azex.io
+域名：wss://ws.azex.io 
 
 **序列化**
 
@@ -19,7 +19,7 @@
 
 **消息体**的序列化通过[protobuf](https://developers.google.com/protocol-buffers/ "protobuf")
 
-websocket-protobuf[文件下载](https://developers.google.com/protocol-buffers/ "文件下载")
+[websocket-protobuf](/protobuf.json "websocket-protobuf")
 
 例
 ```

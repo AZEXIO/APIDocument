@@ -1,7 +1,7 @@
 # APIDocument
 Azex exchange API document
 
-Azex交易平台的API分成公开的API与私有API两部分
+Azex交易平台的API分成公开的API与私有API两部分 
 
 公开API所有人都可以访问
 
