@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ws demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="Protobuffer/long.min.js"></script>
+    <script src="Protobuffer/bytebuffer.min.js"></script>
+    <script src="Protobuffer/protobuf.min.js"></script>
+    <script src="extopws.js"></script>
+    <script src="http://www.css88.com/doc/underscore/underscore-min.js"></script>
+</head>
+
+<body>
+    
+    
+    
+    <div id="app">
+        <select v-model="selectoption">
+            <option value="1">订阅市场深度</option>
+            <option value="2">订阅1分钟k线</option>
+            <option value="3">订阅24小时行情</option>
+            <option value="4">订阅最近成交订单</option>
+        </select>
+        <hr>
+        <div v-if="selectoption==2">
+            ws Data:
+            <div>
+                {{JSON.stringify(kline)}}
+            </div>
+            KLine:
+            <dt>ClosedPrice</dt>
+            <dd>{{ kline.ClosedPrice }}</dd>
+            <dt>Frequency</dt>
+            <dd>{{ kline.Frequency }}</dd>
+            <dt>HighPrice</dt>
+            <dd>{{ kline.HighPrice }}</dd>
+            <dt>LowPrice</dt>
+            <dd>{{ kline.LowPrice }}</dd>
+            <dt>Market</dt>
+            <dd>{{ kline.Market }}</dd>
+            <dt>OpenPrice</dt>
+            <dd>{{ kline.OpenPrice }}</dd>
+            <dt>Volume</dt>
+            <dd>{{ kline.Volume }}</dd>
+        </div>
+        <hr>
+        <div v-if="selectoption==3">
+            ws Data:
+            <div>
+                    {{JSON.stringify(sdkline)}}
+            </div> 
+            24hoursKLine:
+            <dt>ClosedPrice</dt>
+            <dd>{{ sdkline.ClosedPrice }}</dd>
+            <dt>HighPrice</dt>
+            <dd>{{ sdkline.HighPrice }}</dd>
+            <dt>LowPrice</dt>
+            <dd>{{ sdkline.LowPrice }}</dd>
+            <dt>Market</dt>
+            <dd>{{ sdkline.Market }}</dd>
+            <dt>OpenPrice</dt>
+            <dd>{{ sdkline.OpenPrice }}</dd>
+            <dt>Volume</dt>
+            <dd>{{ sdkline.Volume }}</dd>
+        </div>
+        
+        <div v-if="selectoption==4">
+        <table style="border: 1px">
+            <thead>
+                <tr>
+                    <th>Price</th>
+                    <th>Volume</th>
+                    <th>Amount</th>
+                    <th>CreateTime</th>
+                </tr>
+            </thead>
+            <tbody v-for="order in orders">
+                <tr>
+                    <td>
+                        <span v-if="order.Trend==1" style="color: green">{{ order.Price }}</span>
+                        <span v-if="order.Trend==2" style="color: red">{{ order.Price }}</span>
+                        <span v-if="order.Trend==3">{{ order.Price }}</span>
+                    </td>
+                    <td>
+                        {{ order.Volume }}
+                    </td>
+                    <td>
+                        {{ order.Amount }}
+                    </td>
+                    <td>
+                        {{ order.CreateTime.toString() }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        <div v-if="selectoption==1">
+        <table style="border: solid">
+            <thead>
+                <tr>
+                    <th>Ask</th>
+                    <th>Bid</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Price</th>
+                                    <th>Volume</th>
+                                </tr>
+                            </thead>
+                            <tbody v-for="d in depthData.AskList">
+                                <tr>
+                                    <td> {{ d.P }}</td>
+                                    <td> {{ d.V }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Price</th>
+                                    <th>Volume</th>
+                                </tr>
+                            </thead>
+                            <tbody v-for="d in depthData.BidList">
+                                <tr>
+                                    <td> {{ d.P }}</td>
+                                    <td> {{ d.V }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+    <script>
+        var view = new Vue({
+            el: '#app',
+            data: {
+                selectoption:"1",
+                orders: [],
+                kline: {},
+                sdkline: {},
+                depthData: {}
+            },
+            watch:{
+                selectoption(x,y){
+                    console.log(x,y,222)
+                }
+            },
+            mounted(){
+                console.log(this.selectoption+" v222")
+            },
+            methods: {
+                initOrders: function (data) {
+                    for (let i = 0; i < data.length; i++) {
+                        const element = data[i];
+                        this.orders.unshift(element);
+                    }
+                    if (this.orders.length > 0) {
+                        this.orders = this.orders.slice(-100);
+                    }
+                },
+                addLastestOrder: function (order) {
+
+                }
+            }
+        })
+        ws.start({
+            //订单创建消息
+            "CreateOrder": function (data, key) {
+                console.log('ws', 'receive', key, data);
+            },
+            //订单更新消息
+            "UpdateOrder": function (data, key) {
+                console.log('ws', 'receive', key, data);
+            },
+            //计划单触发消息
+            "PlanOrderTrigger": function (data, key) {
+                console.log('ws', 'receive', key, data);
+            },
+            //市场深度数据快照消息
+            "MarketDepthData": function (data, key) {
+                console.log('ws', 'receive', key, data);
+                view.depthData = data;
+            },
+            //市场深度差异数据
+            "MarketDepthDiff": function (data, key) {
+                console.log('ws', 'receive', key, data);
+                updataDepth(data)
+            },
+            //24小时行情
+            "ScrollDayKLine": function (data, key) {
+                console.log('ws', 'receive', key, data);
+                view.sdkline = data;
+            },
+            //最新k线
+            "SingleKLine": function (data, key) {
+                console.log('ws', 'receive', key, data);
+                view.kline = data;
+            },
+            //历史k线
+            "BatchKLine": function (data, key) {
+                console.log('ws', 'receive', key, data);
+            },
+            //历史k线获取结束
+            "BatchKLineSendComplate": function (data, key) {
+                console.log('ws', 'receive', key, data);
+            },
+            //市场交易数据
+            "TradeSimpleDtoList": function (data, key) {
+                console.log('ws', 'receive', key, JSON.stringify(data));
+                view.initOrders(data.List);
+            },
+            "Error": function (data, key) {
+                console.log('ws', 'receive', key, data);
+            }
+            
+        }, "wss://ws.azex.io",null,function() {
+            var market = "eos_btc";
+            
+            
+
+            // 订阅批量K线数据
+            var now = Math.round(new Date().getTime() / 1000);
+            ws.send('SetKLineFequency', { "Market": market, Frequency: "5", Start: now - 60 * 15, End: now, Subscribe: true });
+
+            // 订阅24小时K线，和30分钟K线
+            ws.send("SetReceiveOtherMarketKLine", { Items: [{ Market: market, Frequencys: ["SD1", "30"] }] });
+            
+
+            // 订阅深度数据
+            ws.send("SetMarketDepth", { "Market": market, "Precision": 8, "Limit": 10 });
+            // 订阅最近成交订单
+            ws.send("SetReceiveTradeOrder", { Market: market, Count: 10, Subscribe: true });
+            // ws.send("Login", { "Market": market })
+        });
+
+        //function 
+
+        // 更新深度差异数据
+        function updataDepth(diff) {
+            
+            var depthData = view.depthData;
+
+            // 开始处理买单
+            _.each(diff.AskList, function (d) {
+                var item = _.find(depthData.AskList, { P: d.P })
+                if (item) {
+                    // 原先存在，则更新
+                    item.V = d.V;
+                } else {
+                    // 原先不存在，则为新增
+                    depthData.AskList.push(d);
+                }
+            });
+            // 过滤数量为0的记录，并排序
+            depthData.AskList = _.chain(depthData.AskList).filter(function (item) {
+                return item.V != 0;
+            }).sortBy(function (item) {
+                return item.P;
+            }).value();
+
+            if (depthData.AskList.length > 10) {
+                alert(depthData.AskList.length);
+            }
+
+            // 开始处理卖单
+            _.each(diff.BidList, function (d) {
+                var item = _.find(depthData.BidList, { P: d.P })
+                if (item) {
+                    // 原先存在，则更新
+                    item.V = d.V;
+                } else {
+                    // 原先不存在，则为新增
+                    depthData.BidList.push(d);
+                }
+            });
+
+            // 过滤数量为0的记录，并排序
+            depthData.BidList = _.chain(depthData.BidList).filter(function (item) {
+                return item.V != 0;
+            }).sortBy(function (item) {
+                return -item.P;
+            }).value();
+
+            if (depthData.BidList.length > 10) {
+                alert(depthData.AskList.length);
+            }
+            
+        };
+    </script>
+</body>
+
+</html>

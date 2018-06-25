@@ -70,7 +70,7 @@ API 域名：https://openapi.azex.io
 
 |参数名|类型|说明|必填|
 |:-----  |:-----|----- |-------|
-|market |string   |市场交易对  |是 |
+|market |string   |市场交易对  |否 |
 
 
  **返回示例**
@@ -498,7 +498,10 @@ currencies=btc&timestamp=1500000000
 ``` 
 {
     "isOk": true,
-    "value": "5b207fb09c1a0d82d80799dd",
+    "value": {
+        "OrderId":"5b207fb09c1a0d82d80799dd",
+        "Balance":123
+    },
     "err": {
         "code": 0,
         "message": ""
@@ -510,7 +513,8 @@ currencies=btc&timestamp=1500000000
 
 |参数名|类型|说明|
 |:-----  |:-----|-----                           |
-|value |string   |订单id  |
+|orderId |string   |订单id  |
+|Balance |double   |下单币种余额  |
 
 
 -----
@@ -637,7 +641,7 @@ currencies=btc&timestamp=1500000000
 
 |参数名|类型|说明|必填|
 |:-----  |:-----|----- |-------|
-|OrderIds |string   |订单id，多个订单用英文逗号(,)隔开  |是 |
+|orderIds |string   |订单id，多个订单用英文逗号(,)隔开  |是 |
 |sign |string   |加密签名  |是|
 |timestamp |long   |时间戳  |是|
 

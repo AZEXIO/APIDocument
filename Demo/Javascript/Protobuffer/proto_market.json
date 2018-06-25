@@ -1,0 +1,307 @@
+﻿
+message Chat{
+    //
+    required string Name= 1 ;
+    //
+    required string Content= 2 ;
+    //
+    optional string SourceId= 3 ;
+}
+//聊天广播
+message BroadcastChat{
+}
+//获取聊天信息
+message ReceiveChat{
+    //市场
+    required string Market= 1 ;
+}
+//
+message GetKLineList{
+    //市场
+    required string Market= 1 ;
+    //K线类型
+    required string Frequency= 2 ;
+    //开始时间
+    required int64 Start= 3 ;
+    //结束时间
+    required int64 End= 4 ;
+    //已订阅
+    required bool Subscribe= 5 [default = true];
+}
+//
+message KLineAggrDto{
+}
+//订阅K线
+message SubKLine{
+    //订阅细节
+    repeated SubKLineItem Items= 1 ;
+}
+//K线订阅参数
+message SubKLineItem{
+    //市场
+    required string Market= 1 ;
+    //K线类型
+    repeated string Frequencys= 2 ;
+}
+//
+message String{
+}
+//市场深度列表
+message MarketDepthList{
+    //市场深度列表
+    repeated MarketDepthDto List= 1 ;
+}
+//市场深度快照
+message MarketDepthDto{
+    //市场
+    required string Market= 1 ;
+    //精度
+    required int32 Precision= 2 ;
+    //卖单列表
+    repeated MarketDepth AskList= 3 ;
+    //买单列表
+    repeated MarketDepth BidList= 4 ;
+    //版本号
+    required int64 Version= 5 ;
+}
+//单条市场深度
+message MarketDepth{
+    //单价
+    required double P= 1 ;
+    //订单总金额
+    required double V= 2 ;
+}
+//计划单触发
+message TradeFullDto{
+    //市场
+    required string Market= 1 ;
+    //交易Id
+    required int64 Id= 2 ;
+    //成交价
+    required double Price= 3 ;
+    //成交量
+    required double Volume= 4 ;
+    //成交额
+    required double Amount= 5 ;
+    //是卖单
+    required bool IsAsk= 6 ;
+    //卖家用户Id
+    required int64 AskUserId= 7 ;
+    //卖单Id
+    required string AskOrderId= 8 ;
+    //卖单手续费量
+    required double AskTxVolume= 9 ;
+    //卖单手续费金额
+    required double AskTxAmount= 10 ;
+    //买家用户Id
+    required int64 BidUserId= 11 ;
+    //买单Id
+    required string BidOrderId= 12 ;
+    //买单手续费量
+    required double BidTxVolume= 13 ;
+    //买单手续费金额
+    required double BidTxAmount= 14 ;
+    //创建时间
+    required int64 CreateTime= 15 ;
+    //涨跌情况
+    required int32 Trend= 16 ;
+}
+//订阅市场深度
+message SubMarketDepth{
+    //市场
+    required string Market= 1 ;
+    //小数位精度
+    required int32 Precision= 2 ;
+    //获取条数，可选值为：10,20,40
+    required int32 Limit= 3 ;
+}
+//获取最新交易列表
+message GetTopTradeList{
+    //市场
+    required string Market= 1 ;
+    //数量
+    required int32 Count= 2 ;
+    //已订阅
+    required bool Subscribe= 3 ;
+}
+//获取热门币种
+message GetRankingList{
+    //基本币
+    required string BasicId= 1 ;
+}
+//订单信息
+message OrderInfoDto{
+    //订单Id
+    required string Id= 1 ;
+    //用户Id
+    required int64 UserId= 2 ;
+    //币种
+    required string Currency= 3 ;
+    //手续费币种
+    required string FeeCurrency= 4 ;
+    //市场
+    required string Market= 5 ;
+    //订单分类
+    required int32 Category= 6 ;
+    //买卖类别
+    required int32 OrderType= 7 ;
+    //计划单类别
+    required int32 PlanType= 8 ;
+    //触发价格
+    required double TriggerPrice= 9 ;
+    //限价单单价
+    required double Price= 10 ;
+    //限价单数量
+    required double Volume= 11 ;
+    //市价单金额
+    required double Amount= 12 ;
+    //订单状态
+    required int32 Status= 13 ;
+    //创建时间
+    required int64 CreateTime= 14 ;
+}
+//计划单触发
+message PlanOrderTrigger{
+    //市场
+    required string Market= 1 ;
+    //计划订单ID
+    required string Id= 2 ;
+    //触发价格
+    required double Price= 3 ;
+    //用户Id
+    required int64 UserId= 4 ;
+}
+//登录市场
+message LoginToMarket{
+    //市场
+    required string Market= 1 ;
+}
+//错误信息
+message WsError{
+    //错误码
+    required int32 Code= 1 ;
+    //错误提示
+    required string Message= 2 ;
+}
+//K线数据
+message WsKLine{
+    //市场
+    required string Market= 1 ;
+    //K线类型
+    required string Frequency= 2 ;
+    //成交量
+    required double Volume= 3 ;
+    //开盘价
+    required double OpenPrice= 4 ;
+    //收盘价
+    required double ClosedPrice= 5 ;
+    //最低价
+    required double LowPrice= 6 ;
+    //最高价
+    required double HighPrice= 7 ;
+    //开盘时间
+    required int64 OpenTime= 8 ;
+}
+//K线数据
+message WsKLineList{
+    //K线数据
+    repeated WsKLine List= 1 ;
+}
+//K线数据批量发送完成
+message BatchSendComplate{
+    //市场
+    required string Market= 1 ;
+    //K线类型
+    required string Frequency= 2 ;
+    //
+    required int64 Start= 3 ;
+    //
+    required int64 End= 4 ;
+    //是否到达K线的起点位置
+    required bool IsStart= 5 ;
+}
+//市场深度差异信息。差异比较方法：1.新出现的价格，表示新增深度。2.已出现的价格，挂单数不为0，表示更新.3.已出现的价格，挂单数为0，表示删除此深度。=====若StartVersion和市场深度快照的版本不同，需要重新获取市场深度快照
+message MarketDepthDiff{
+    //市场
+    required string Market= 1 ;
+    //精度
+    required int32 Precision= 2 ;
+    //卖单差异列表
+    repeated MarketDepth AskList= 3 ;
+    //买单差异列表
+    repeated MarketDepth BidList= 4 ;
+    //版本号
+    required int64 StartVersion= 5 ;
+    //版本号
+    required int64 EndVersion= 6 ;
+}
+//交易数据
+message TradeSimpleDtoList{
+    //交易数据
+    repeated TradeSimpleData List= 1 ;
+}
+//成交信息
+message TradeSimpleData{
+    //市场
+    required string Market= 1 ;
+    //成交Id
+    required int64 Id= 2 ;
+    //成交价
+    required double Price= 3 ;
+    //成交量
+    required double Volume= 4 ;
+    //成交额
+    required double Amount= 5 ;
+    //涨跌类型
+    required int32 Trend= 6 ;
+    //成交时间
+    required int64 CreateTime= 7 ;
+}
+//24小时滚动数据
+message ScrollDayKLine{
+    //市场
+    required string Market= 1 ;
+    //开盘价
+    required double OpenPrice= 2 ;
+    //收盘价
+    required double ClosedPrice= 3 ;
+    //最低价
+    required double LowPrice= 4 ;
+    //最高价
+    required double HighPrice= 5 ;
+    //成交量
+    required double Volume= 6 ;
+}
+//价格上涨幅度排行
+message RankingDataList{
+    //价格上涨幅度排行
+    repeated RankCurrencyDto List= 1 ;
+}
+//热门币种
+message RankCurrencyDto{
+    //市场
+    required string Market= 1 ;
+    //币种
+    required string Currency= 2 ;
+    //单价
+    required double Price= 3 ;
+    //日涨跌幅
+    required double DayRiseFallPercent= 4 ;
+    //周涨跌幅
+    required double WeekRiseFallPercent= 5 ;
+}
+//更新订单信息
+message UpdateOrderInfo{
+    //最高价
+    required string Market= 1 ;
+    //订单Id
+    required string OrderId= 2 ;
+    //交易量
+    required double TxVolume= 3 ;
+    //交易额
+    required double TxAmount= 4 ;
+    //订单状态
+    required int16 Status= 5 ;
+    //更新时间
+    required int64 UpdateTime= 6 ;
+}
