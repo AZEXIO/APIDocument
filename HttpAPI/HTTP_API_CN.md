@@ -5,7 +5,7 @@
 
 API 域名：https://openapi.azex.io
 
-
+[签名说明](#sign)
 
 ### 行情API
 
@@ -369,7 +369,7 @@ API 域名：https://openapi.azex.io
 
 ## 私人API使用说明
 
-私人api每次请求都需要构建一个签名参数sign与一个Authorization的请求头
+私人api每次请求都需要构建一个签名参数sign，时间戳参数timestamp（**UTC时间**）与一个Authorization的Http-header请求头
 
 
 ### 签名
@@ -423,7 +423,7 @@ currencies=btc&timestamp=1500000000
 |参数名|类型|说明|必填|
 |:-----  |:-----|----- |-------|
 |currencies |string   |币种，多个币种英文逗号隔开，为空查询所有币种  |否 |
-|timestamp |long   |时间戳  |是|
+|timestamp |long   |时间戳 **UTC时间** |是|
 |sign |string   |加密签名  |是|
 
  **返回示例**
@@ -491,7 +491,7 @@ currencies=btc&timestamp=1500000000
 |volume |string   |限价单数量，市价卖单数量  |是|
 |amount |string   |市价买单金额  |是|
 |sign |string   |加密签名  |是|
-|timestamp |long   |时间戳  |是|
+|timestamp |long   |时间戳 **UTC时间**  |是|
 
  **返回示例**
 
@@ -537,7 +537,7 @@ currencies=btc&timestamp=1500000000
 |price |string   |挂单价格  |是|
 |volume |string   |挂单数量 |是|
 |sign |string   |加密签名  |是|
-|timestamp |long   |时间戳  |是|
+|timestamp |long   |时间戳 **UTC时间** |是|
 
  **返回示例**
 
@@ -578,7 +578,7 @@ currencies=btc&timestamp=1500000000
 |orderCategory |int   |订单类型（1非计划单2计划单）  |是|
 |orderId |string   |订单id  |是|
 |sign |string   |加密签名  |是|
-|timestamp |long   |时间戳  |是|
+|timestamp |long   |时间戳 **UTC时间** |是|
 
  **返回示例**
 
@@ -612,7 +612,7 @@ currencies=btc&timestamp=1500000000
 |marketId |string   |市场 例 eth_btc  |是 |
 |orderCategory |int   |订单类型（1非计划单2计划单）  |是|
 |sign |string   |加密签名  |是|
-|timestamp |long   |时间戳  |是|
+|timestamp |long   |时间戳 **UTC时间** |是|
 
  **返回示例**
 
@@ -643,7 +643,7 @@ currencies=btc&timestamp=1500000000
 |:-----  |:-----|----- |-------|
 |orderIds |string   |订单id，多个订单用英文逗号(,)隔开  |是 |
 |sign |string   |加密签名  |是|
-|timestamp |long   |时间戳  |是|
+|timestamp |long   |时间戳 **UTC时间** |是|
 
  **返回示例**
 

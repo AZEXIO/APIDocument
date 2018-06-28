@@ -111,11 +111,11 @@ no
 |id | string | market id |
 |basic | string | basic currency |
 Target | string | target currency |
-|makerFeeRate | float |Order Processing Fees |
-|takerFeeRate | float |Fare handling fee |
-|minOrderAmount | float |Minimum total order |
-|pricePrecision | float |Maximum price accuracy |
-|volumePrecision | float |Maximum number precision |
+|makerFeeRate | float | Maker fee rate |
+|takerFeeRate | float | Taker fee rate |
+|minOrderAmount | float |Minimum total of order |
+|pricePrecision | float |Maximum price precision |
+|volumePrecision | float |Maximum amount precision |
 |depthVolumePrecision | float |Deep precision |
 
 
@@ -366,7 +366,7 @@ Target | string | target currency |
 
 ## Private API Instructions
 
-Each request requires the construction of sign, a signature parameter, and an request header-Authorization
+Each request requires the construction of sign, an signature parameter,an timestamp parameter (**UTC Time**) and an request header-Authorization
 
 
 ### signature
@@ -420,7 +420,7 @@ If the Secret Key is 2288987EFDB54F848D7BACCE1288FC9A, the sign value is calcula
 |Parameter name|Type|Description|Required|
 |:----- |:-----|----- |-------|
 |currencies |string| Coin type, multiple coins is separated by commas, empty value means all balances | No |
-|timestamp |long | timestamp | yes |
+|timestamp |long | timestamp **UTC Time** | yes |
 |sign |string | Signature |Yes|
 
 **Return example**
@@ -488,7 +488,7 @@ If the Secret Key is 2288987EFDB54F848D7BACCE1288FC9A, the sign value is calcula
 |volume |string | coin quantity | Yes|
 |amount |string | Order total price |Yes|
 |sign |string | Signature |Yes|
-|timestamp |long | timestamp | yes |
+|timestamp |long | timestamp **UTC Time** | yes |
 
 **Return example**
 
@@ -530,7 +530,7 @@ If the Secret Key is 2288987EFDB54F848D7BACCE1288FC9A, the sign value is calcula
 |price |string |Order price |Yes|
 |volume |string |coin volume  |Yes|
 |sign |string | Signature |Yes|
-|timestamp |long | timestamp | yes |
+|timestamp |long | timestamp **UTC Time** | yes |
 
 **Return example**
 
@@ -571,7 +571,7 @@ If the Secret Key is 2288987EFDB54F848D7BACCE1288FC9A, the sign value is calcula
 |orderCategory |int |Order Type (1 non-plan 2 plan sheet) |Yes|
 |orderId |string |Order id |Yes|
 |sign |string | Signature |Yes|
-|timestamp |long | timestamp | yes |
+|timestamp |long | timestamp **UTC Time** | yes |
 
 **Return example**
 
@@ -605,7 +605,7 @@ If the Secret Key is 2288987EFDB54F848D7BACCE1288FC9A, the sign value is calcula
 |marketId |string |Marketing Example eth_btc (cancel all orders of eht_btc)|Yes |
 |orderCategory |int |Order Type (1 non-plan 2 plan sheet) |Yes|
 |sign |string | Signature |Yes|
-|timestamp |long | timestamp | yes |
+|timestamp |long | timestamp **UTC Time** | yes |
 
 **Return example**
 
@@ -636,7 +636,7 @@ If the Secret Key is 2288987EFDB54F848D7BACCE1288FC9A, the sign value is calcula
 |:----- |:-----|----- |-------|
 |OrderIds |string |Order id, multiple orders are separated by commas (,) |Yes |
 |sign |string | Signature |Yes|
-|timestamp |long | timestamp | yes |
+|timestamp |long | timestamp **UTC Time** | yes |
 
 **Return example**
 
