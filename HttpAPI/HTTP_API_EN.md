@@ -431,16 +431,11 @@ If the Secret Key is 2288987EFDB54F848D7BACCE1288FC9A, the sign value is calcula
   "value": {
     "items": [
       {
-        "id": "string",
-        "userId": 0,
         "currency": "string",
-        "address": "string",
-        "balance": 0,
-        "locked": 0,
-        "mortgaged": 0,
-        "totalAmount": 0,
-        "status": 0,
-        "createdAt": "2018-06-11T09:24:24.629Z"
+        "lockedBalance": 0,
+        "availableBalance": 0,
+        "mortgagedBalance": 0,
+        "totalBalance": 0
       }
     ]
   },
@@ -455,15 +450,12 @@ If the Secret Key is 2288987EFDB54F848D7BACCE1288FC9A, the sign value is calcula
 
 |Parameter name|Type|Description|
 |:----- |:-----|----- |
-|id |string |coin id |
-|userId |string |user id |
 |currency |string |coin code |
-|address |string |recharge address |
-|balance |double |available balance |
-|locked |double |Freeze balance |
-|mortgaged |double |Mortgage Amount |
-|totalAmount |double |Total Balance |
-|status |int |Account Status (0 Inactive 1 Active 2 Locked 3 Disabled) |
+|availableBalance |double |available balance |
+|lockedBalance |double |Freeze balance |
+|mortgagedBalance |double |Mortgage Amount |
+|totalBalance |double |Total Balance |
+
 
 
 

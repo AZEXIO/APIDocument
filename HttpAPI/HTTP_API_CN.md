@@ -431,16 +431,11 @@ currencies=btc&timestamp=1500000000
   "value": {
     "items": [
       {
-        "id": "string",
-        "userId": 0,
         "currency": "string",
-        "address": "string",
-        "balance": 0,
-        "locked": 0,
-        "mortgaged": 0,
-        "totalAmount": 0,
-        "status": 0,
-        "createdAt": "2018-06-11T09:24:24.629Z"
+        "lockedBalance": 0,
+        "availableBalance": 0,
+        "mortgagedBalance": 0,
+        "totalBalance": 0
       }
     ]
   },
@@ -455,15 +450,12 @@ currencies=btc&timestamp=1500000000
 
 |参数名|类型|说明|
 |:-----  |:-----|-----                           |
-|id |string   |币种id  |
-|userId |string   |用户id  |
 |currency |string   |币种代码  |
-|address |string   |充值地址  |
-|balance |double   |可用余额  |
-|locked |double   |冻结余额  |
-|mortgaged |double   |抵押金额  |
-|totalAmount |double   |余额总额  |
-|status |int   |账户状态 （0未激活1激活2锁定3禁用） |
+|lockedBalance |double   |冻结余额  |
+|availableBalance |double   |可用余额  |
+|mortgagedBalance |double   |抵押余额  |
+|totalBalance |double   |总余额  |
+
 
 
 
