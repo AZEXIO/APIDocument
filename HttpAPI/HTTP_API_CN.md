@@ -2,9 +2,6 @@
 
 ## 使用说明
 
-
-API 域名：https://openapi.azex.io
-
 [签名说明](#sign)
 
 ### 行情API
@@ -17,7 +14,7 @@ API 域名：https://openapi.azex.io
 - 获取平台所有币种
 
 **请求URL：** 
-- Get ` /Market/GetCurrencys `
+- Get ` https://openapi.azex.io/Market/GetCurrencys `
   
 
 
@@ -62,7 +59,7 @@ API 域名：https://openapi.azex.io
 - 获取市场信息(精度等数据)
 
 **请求URL：** 
-- Get ` /Market/GetMarketInfos `
+- Get ` https://openapi.azex.io/Market/GetMarketInfos `
   
 
 
@@ -128,7 +125,7 @@ API 域名：https://openapi.azex.io
 - 获取市场k线
 
 **请求URL：** 
-- Get ` /Market/GetKline `
+- Get ` https://ws.azex.io/Market/GetKline `
   
 
 
@@ -196,7 +193,7 @@ API 域名：https://openapi.azex.io
 - 获取市场深度
 
 **请求URL：** 
-- Get ` /Market/GetDepth `
+- Get ` https://ws.azex.io/Market/GetDepth `
   
 
 
@@ -265,7 +262,7 @@ API 域名：https://openapi.azex.io
 - 获取市场24小时滚动行情
 
 **请求URL：** 
-- Get ` /Market/GetTiker `
+- Get ` https://ws.azex.io/Market/GetTiker `
   
 
 
@@ -316,7 +313,7 @@ API 域名：https://openapi.azex.io
 - 获取最近成交记录
 
 **请求URL：** 
-- Get ` /Market/GetHistoryTrade `
+- Get ` https://ws.azex.io/Market/GetHistoryTrade `
   
 
 
@@ -414,7 +411,7 @@ currencies=btc&timestamp=1500000000
 - 获取账户资产
 
 **请求URL：** 
-- Post ` /Account/Balance `
+- Post ` https://openapi.azex.io/Account/Balance `
   
 
 
@@ -478,7 +475,7 @@ currencies=btc&timestamp=1500000000
 - 市价与限价单下单
 
 **请求URL：** 
-- Post` /Order/Trade `
+- Post` https://openapi.azex.io/Order/Trade `
 
 
 **参数：** 
@@ -524,7 +521,7 @@ currencies=btc&timestamp=1500000000
 - 计划单下单
 
 **请求URL：** 
-- Post` /Order/SubmitPlanOrder `
+- Post` https://openapi.azex.io/Order/SubmitPlanOrder `
 
 
 **参数：** 
@@ -566,7 +563,7 @@ currencies=btc&timestamp=1500000000
 - 撤销订单
 
 **请求URL：** 
-- Post ` /Order/CancelOrder `
+- Post ` https://openapi.azex.io/Order/CancelOrder `
 
 
 **参数：** 
@@ -601,7 +598,7 @@ currencies=btc&timestamp=1500000000
 - 批量撤销订单
 
 **请求URL：** 
-- Post ` /Order/BatchCancelOrder `
+- Post ` https://openapi.azex.io/Order/BatchCancelOrder `
   
 
 
@@ -633,7 +630,7 @@ currencies=btc&timestamp=1500000000
 - 查询订单
 
 **请求URL：** 
-- Post` /Order/QueryOrder `
+- Post` https://openapi.azex.io/Order/QueryOrder `
   
 
 
