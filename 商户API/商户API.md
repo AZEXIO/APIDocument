@@ -1,18 +1,18 @@
-﻿#AZEX 商户-API 
+﻿# AZEX 商户-API
 
-##请求
+## 请求
 
-###1.创建充值地址
+### 1.创建充值地址
 
 创建充值地址接口因为业务原因，不是一个实时返回结果的接口，当充值地址真正创建成功之后会调用商户的回调接口进行通知
 
-**请求URL：** 
+**请求URL：**
 - Post ` https://api.azex.io/MerchantApi/Merchant/GenerateAddress `
 
   Content-Type 请指定为 application/x-www-form-urlencoded
 
 
-**参数：** 
+**参数：**
 
 |参数名|类型|说明|必填|
 |:-----  |:-----|----- |-------|
@@ -28,7 +28,7 @@ merchantid=1&currency=btc&timestamp=100000&sign=xxx
 
  **返回示例**
 
-``` 
+```
 {
   "isOk": true,
   "err": {
@@ -38,17 +38,17 @@ merchantid=1&currency=btc&timestamp=100000&sign=xxx
 }
 ```
 ---
-###2.提现地址校验
+### 2.提现地址校验
 
 当提现请求成功之后会调用商户的回调接口进行通知
 
-**请求URL：** 
+**请求URL：**
 - Post ` https://api.azex.io/MerchantApi/Merchant/WithdrawAddressValidation `
 
   Content-Type 请指定为 application/x-www-form-urlencoded
 
 
-**请求参数：** 
+**请求参数：**
 
 |参数名|类型|说明|必填|
 |:-----  |:-----|----- |-------|
@@ -65,7 +65,7 @@ address=xxx&memo=xxx&merchantid=1&timestamp=100000&sign=xxx
 
  **返回示例**
 
-``` 
+```
 {
   "isOk": true,
   "err": {
@@ -77,17 +77,17 @@ address=xxx&memo=xxx&merchantid=1&timestamp=100000&sign=xxx
 
 
 ---
-###3.提现
+### 3.提现
 
 当提现请求成功之后会调用商户的回调接口进行通知
 
-**请求URL：** 
+**请求URL：**
 - Post ` https://api.azex.io/MerchantApi/Merchant/Withdraw `
 
   Content-Type 请指定为 application/x-www-form-urlencoded
 
 
-**请求参数：** 
+**请求参数：**
 
 |参数名|类型|说明|必填|
 |:-----  |:-----|----- |-------|
@@ -106,7 +106,7 @@ address=xxx&currency=btc&memo=xxx&merchantid=1&volume=666&timestamp=100000&sign=
 
  **返回示例**
 
-``` 
+```
 {
   "isOk": true,
   "value":{
@@ -128,16 +128,16 @@ address=xxx&currency=btc&memo=xxx&merchantid=1&volume=666&timestamp=100000&sign=
 
 ---
 
-###4.提现状态查询
+### 4.提现状态查询
 
 
-**请求URL：** 
+**请求URL：**
 - Post ` https://api.azex.io/MerchantApi/Merchant/Withdraw `
 
   Content-Type 请指定为 application/x-www-form-urlencoded
 
 
-**请求参数：** 
+**请求参数：**
 
 |参数名|类型|说明|必填|
 |:-----  |:-----|----- |-------|
@@ -153,7 +153,7 @@ merchantid=1&withdrawId=xxx&timestamp=100000&sign=xxx
 
  **返回示例**
 
-``` 
+```
 {
   "isOk": true,
   "value":{
@@ -198,7 +198,7 @@ merchantid=1&withdrawId=xxx&timestamp=100000&sign=xxx
 ---
 
 
-##回调
+## 回调
 回调请求是由azex服务器调用客户端的http请求
 
 
@@ -206,13 +206,13 @@ merchantid=1&withdrawId=xxx&timestamp=100000&sign=xxx
 
 
 
-**请求URL：** 
+**请求URL：**
 - Post ` 商户回调地址 `
-  
-  
 
 
-**参数：** 
+
+
+**参数：**
 
 |参数名|类型|说明|必填|
 |:-----  |:-----|----- |-------|
@@ -232,17 +232,17 @@ id=123&address=xxxx&memo=xxxx&currency=btc&timestamp=100000&sign=xxx
 
 
 
-###2.充值到账回调
+### 2.充值到账回调
 
 
 
-**请求URL：** 
+**请求URL：**
 - Post ` 商户回调地址 `
-  
-  
 
 
-**参数：** 
+
+
+**参数：**
 
 |参数名|类型|说明|必填|
 |:-----  |:-----|----- |-------|
@@ -262,17 +262,17 @@ id=123&address=xxxx&memo=xxxx&currency=btc&volume=10&fee=0.01&timestamp=100000&s
 
 ---
 
-###3.提现地址验证回调
+### 3.提现地址验证回调
 
 
 
-**请求URL：** 
+**请求URL：**
 - Post ` 商户回调地址 `
-  
-  
 
 
-**参数：** 
+
+
+**参数：**
 
 |参数名|类型|说明|必填|
 |:-----  |:-----|----- |-------|
@@ -288,17 +288,17 @@ isvalid=true&address=xxxx&memo=xxxx&timestamp=100000&sign=xxx
 ```
 
 ---
-###4.提现状态变更回调
+### 4.提现状态变更回调
 
 当提现申请被驳回或者通过时回调通知商户
 
-**请求URL：** 
+**请求URL：**
 - Post ` 商户回调地址 `
-  
-  
 
 
-**参数：** 
+
+
+**参数：**
 
 |参数名|类型|说明|必填|
 |:-----  |:-----|----- |-------|
@@ -315,7 +315,7 @@ withdrawId=xxx&status=1&timestamp=100000&sign=xxx
 ---
 
 
-##签名说明
+## 签名说明
 
 
 
@@ -337,7 +337,7 @@ currencies=btc&merchantId=1&timestamp=1500000000
 ```
 
 
-  
+
 
 
 ------------
