@@ -40,7 +40,7 @@ merchantid=1&currency=btc&timestamp=100000&sign=xxx
 ---
 ### 2.提现地址校验
 
-当提现请求成功之后会调用商户的回调接口进行通知
+当校验请求成功之后会调用商户的回调接口通知校验结果
 
 **请求URL：**
 - Post ` https://api.azex.io/MerchantApi/Merchant/WithdrawAddressValidation `

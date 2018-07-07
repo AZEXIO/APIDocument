@@ -1,15 +1,15 @@
-﻿# AZEX Websocket 
+﻿# AZEX Websocket
 
 ## 使用说明
 
 
-域名：wss://ws.azex.io 
+域名：wss://ws.azex.io
 
 **序列化**
 
 **消息请求**：消息请求组成包括**路由，命令，消息体**三个部分
 
-请求消息的前四个字节（int32）为**路由** 
+请求消息的前四个字节（int32）为**路由**
 请求消息的第五与第六个字节为**命令**（int16）
 
 
@@ -19,7 +19,9 @@
 
 **消息体**的序列化通过[protobuf](https://developers.google.com/protocol-buffers/ "protobuf")
 
-[websocket-protobuf](/protobuf.json "websocket-protobuf")
+[websocket-protobuf](/WebSocketAPI/protobuf.json "websocket-protobuf")
+
+**protobuf的序列化字节序为小端字节序**
 
 例
 ```
@@ -68,7 +70,7 @@ ws.send(byteof(route)+byteof(SendCommand)+protbuf.Serialize(subMarket));
 接收代码（伪代码）如下
 ```
 OnWebsocketReceived（byte[] data）{
-	
+
 	int16 receiveCommand = ConvertToInt16（data.sub(0,2))
 	switch(receiveCommand)
 	case 1003
@@ -102,7 +104,7 @@ OnWebsocketReceived（byte[] data）{
 **请求消息**
 
 **路由：1**
-**命令：907** 
+**命令：907**
 请求参数：
 
 ```
@@ -267,7 +269,7 @@ message BatchSendComplate{
 **请求消息**
 
 **路由：1**
-**命令：902** 
+**命令：902**
 请求参数：
 
 ```
@@ -532,7 +534,7 @@ Authorization=81.67AAA2F6041D408D9868387A8904431D
 57c4c6770d565aa236f87706053bd51512862443062e471bd3243a6ed8eef2
 ```
 最终生成的ws地址：
-wss://api.azex.io?Authorization=81.67AAA2F6041D408D9868387A8904431D&sign=57c4c6770d565aa236f87706053bd51512862443062e471bd3243a6ed8eef2
+wss://ws.azex.io?Authorization=81.67AAA2F6041D408D9868387A8904431D&sign=57c4c6770d565aa236f87706053bd51512862443062e471bd3243a6ed8eef2
 
 
 ----
@@ -673,7 +675,7 @@ message PlanOrderTrigger{
 错误信息消息
 
 **接收消息**
-**命令：0** 
+**命令：0**
 ```
 message WsError{
     //错误码

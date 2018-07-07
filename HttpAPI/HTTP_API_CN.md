@@ -429,15 +429,22 @@ currencies=btc&timestamp=1500000000
 {
   "isOk": true,
   "value": {
-    "items": [
-      {
-        "currency": "string",
-        "lockedBalance": 0,
-        "availableBalance": 0,
-        "mortgagedBalance": 0,
-        "totalBalance": 0
-      }
-    ]
+     [
+         {
+             "currency":"usdt",
+             "lockedBalance":0.00000000,
+             "availableBalance":100000.00000000,
+             "mortgagedBalance":0.00000000,
+             "totalBalance":100000.00000000
+         },
+         {
+             "currency":"btc",
+             "lockedBalance":0.00000000,
+             "availableBalance":10.08500000,
+             "mortgagedBalance":0.00000000,
+             "totalBalance":10.08500000
+         }
+     ]
   },
   "err": {
     "code": 0,

@@ -12,7 +12,7 @@ API domain name: https://openapi.azex.io
 ------------
 
 
-**A brief description:** 
+**A brief description:**
 
 - Get all currencies in the platform
 
@@ -57,7 +57,7 @@ no
 
 
 
-**A brief description:** 
+**A brief description:**
 
 - Get market information (accuracy and other data)
 
@@ -123,7 +123,7 @@ Target | string | target currency |
 
 
 
-**A brief description:** 
+**A brief description:**
 
 - Get market k line
 
@@ -191,7 +191,7 @@ Target | string | target currency |
 ------------
 
 
-**A brief description:** 
+**A brief description:**
 
 - Get market depth
 
@@ -260,7 +260,7 @@ Target | string | target currency |
 
 ------------
 
-**A brief description:** 
+**A brief description:**
 
 - Get market 24-hour rolling quotes
 
@@ -311,7 +311,7 @@ Target | string | target currency |
 
 ------------
 
-**A brief description:** 
+**A brief description:**
 
 - Get recent transactions
 
@@ -377,7 +377,7 @@ Get api: Please create api in Account Settings -> Api Management -> Create API. 
 
 **Secrect Key is used to generate sign parameters**
 
-**Sign generation method:** The encrypted string obtained by ascending order of the interface request parameters and the Secret Key as the key are used to calculate HmacSHA256 
+**Sign generation method:** The encrypted string obtained by ascending order of the interface request parameters and the Secret Key as the key are used to calculate HmacSHA256
 
 example
 
@@ -406,7 +406,7 @@ If the Secret Key is 2288987EFDB54F848D7BACCE1288FC9A, the sign value is calcula
 ------------
 
 
-**A brief description:** 
+**A brief description:**
 
 - Get account assets
 
@@ -427,22 +427,29 @@ If the Secret Key is 2288987EFDB54F848D7BACCE1288FC9A, the sign value is calcula
 
 ```
 {
-  "isOk": true,
-  "value": {
-    "items": [
-      {
-        "currency": "string",
-        "lockedBalance": 0,
-        "availableBalance": 0,
-        "mortgagedBalance": 0,
-        "totalBalance": 0
-      }
-    ]
-  },
-  "err": {
-    "code": 0,
-    "message": "string"
-  }
+  "isOk": true,
+  "value": {
+     [
+         {
+             "currency":"usdt",
+             "lockedBalance":0.00000000,
+             "availableBalance":100000.00000000,
+             "mortgagedBalance":0.00000000,
+             "totalBalance":100000.00000000
+         },
+         {
+             "currency":"btc",
+             "lockedBalance":0.00000000,
+             "availableBalance":10.08500000,
+             "mortgagedBalance":0.00000000,
+             "totalBalance":10.08500000
+         }
+     ]
+  },
+  "err": {
+    "code": 0,
+    "message": "string"
+  }
 }
 ```
 
@@ -462,7 +469,7 @@ If the Secret Key is 2288987EFDB54F848D7BACCE1288FC9A, the sign value is calcula
 ------------
 
 
-**A brief description:** 
+**A brief description:**
 
 - Order
 
@@ -504,7 +511,7 @@ If the Secret Key is 2288987EFDB54F848D7BACCE1288FC9A, the sign value is calcula
 
 -----
 
-**A brief description:** 
+**A brief description:**
 
 - Plan orders
 
@@ -546,7 +553,7 @@ If the Secret Key is 2288987EFDB54F848D7BACCE1288FC9A, the sign value is calcula
 
 
 ----
-**A brief description:** 
+**A brief description:**
 
 - Cancellation of order
 
@@ -581,7 +588,7 @@ If the Secret Key is 2288987EFDB54F848D7BACCE1288FC9A, the sign value is calcula
 
 ----
 
-**A brief description:** 
+**A brief description:**
 
 - Mass cancellation of orders
 
@@ -613,7 +620,7 @@ If the Secret Key is 2288987EFDB54F848D7BACCE1288FC9A, the sign value is calcula
 
 ----
 
-**A brief description:** 
+**A brief description:**
 
 - checking order
 
