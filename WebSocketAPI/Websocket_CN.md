@@ -360,37 +360,31 @@ message SubKLineItem{
 
 **接收消息**
 
-**命令：1000**
+**命令：1006**
 ```
 message WsKLine{
     //市场
     required string Market= 1 ;
-    //K线类型
-    required string Frequency= 2 ;
-    //成交量
-    required double Volume= 3 ;
     //开盘价
-    required double OpenPrice= 4 ;
+    required double OpenPrice= 2 ;
     //收盘价
-    required double ClosedPrice= 5 ;
+    required double ClosedPrice= 3 ;
     //最低价
-    required double LowPrice= 6 ;
+    required double LowPrice= 4 ;
     //最高价
-    required double HighPrice= 7 ;
-    //开盘时间
-    required int64 OpenTime= 8 ;
+    required double HighPrice= 5 ;
+    //成交量
+    required double Volume= 6 ;
 }
 ```
 |参数名|类型|说明|protobuf序列|
 |:-----  |:-----|-----|----|
 |market |string   |市场交易对  |1
-|frequency |string   |Frequencys 可选值 “1”, “5”, “15”, “30”, “60”, “180”, “360”, “720”, “D”, “7D”  |2|
-|volume |double   |成交量 |3|
-|openPrice |double   |开盘价  |4|
-|closedPrice |double   |收盘价  |5|
-|lowPrice |double   |最低价  |6|
-|highPrice |double   |最高价  |7|
-|openTime |long   |开盘时间  |8|
+|openPrice |double   |开盘价  |2|
+|closedPrice |double   |收盘价  |3|
+|lowPrice |double   |最低价  |4|
+|highPrice |double   |最高价  |5|
+|volume |double   |成交量 |6|
 
 
 ----

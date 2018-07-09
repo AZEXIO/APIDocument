@@ -294,35 +294,29 @@ Parameter Description
 
 **Command: 1000**
 ```
-Message WsKLine{
-    //market
-    Required string Market= 1 ;
-    //K line type
-    Required string Frequency= 2 ;
-    / Volume
-    Required double Volume= 3 ;
-    //Opening price
-    Required double OpenPrice= 4 ;
-    //Closing price
-    Required double ClosedPrice= 5 ;
-    //lowest price
-    Required double LowPrice= 6 ;
-    // highest price
-    Required double HighPrice= 7 ;
-    //Opening time
-    Required int64 OpenTime= 8 ;
+message WsKLine{
+    //market
+    required string Market= 1 ;
+    //Opening price
+    required double OpenPrice= 2 ;
+    //Closing price
+    required double ClosedPrice= 3 ;
+    //lowest price
+    required double LowPrice= 4 ;
+    // highest price
+    required double HighPrice= 5 ;
+    // Volume
+    required double Volume= 6 ;
 }
 ```
 |Parameter Name|Type|Description|Protobuf Sequence|
 |:----- |:-----|-----|----|
 |market |string |Market Trading Pairs |1
-|frequency |string |Frequencys Optional values ​​"1", "5", "15", "30", "60", "180", "360", "720", "D", "7D" |2 |
-|volume |double |Volume |3|
-|openPrice |double |Opening price |4|
-|closedPrice |double |close price |5|
-|lowPrice |double |lowest |6|
-|highPrice | double | highest price |7|
-|openTime |long |Opening Time |8|
+|openPrice |double |Opening price |2|
+|closedPrice |double |close price |3|
+|lowPrice |double |lowest |4|
+|highPrice | double | highest price |5|
+|volume |double |Volume |6|
 
 ----
 
@@ -515,7 +509,7 @@ Get api: Please create api in the Account Settings -> Api Management -> create a
 
 **Secrect Key is used to generate sign parameters**
 
-**sign generation method:** Use Secret Key as key, Authorization=Apikey as value to calculate HmacSHA256 
+**sign generation method:** Use Secret Key as key, Authorization=Apikey as value to calculate HmacSHA256
 
 example
 
