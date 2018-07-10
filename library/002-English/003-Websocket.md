@@ -1,674 +1,779 @@
 # AZEX Websocket
 
-## Instructions
+> This article is translated by Bing and, if there is a problem, welcome feedback via the right link:<https://github.com/AZEXIO/APIDocument/issues>
 
-Domain Name:wss://ws.azex.io
+Developers can use this document to learn how to implement subscription data and individual order changes through WebSocket.
 
-**Serialization**
+## General Description
 
-**Message Request**: The message request consists of three parts: **Route, Command, and Message Body**
+### Link Address
 
-The first four bytes (int32) of the request message are **routes** The fifth and sixth bytes of the request message are **Command** (int16)
+Websocket's link address is: **wss://ws.azex.io**
 
-**Message receiving** : The message returned by the server consists of two parts: the ** command and the message body.
+### Message Structure
 
-The first two bytes of the received message are **Command** (int16)
+#### Request Message
 
-** Serialization of message bodies via [protobuf] (<https://developers.google.com/protocol-buffers/> "protobuf")
+Request message consist of **router**,**command**,**body** three parts.
 
-[websocket-protobuf](/protobuf.json "websocket-protobuf")
+The first four bytes of the request is **router**, and the fifth to sixth byte of the request is **command**.
 
-example
+The remaining part is **body**.
 
-```
-//Subscription market depth
-Message SubMarketDepth{
+#### Received Message
+
+The message returned by AZEX is composed of the **command**,**body** two parts.
+
+The first four bytes of the request is **command**, and the remaining part is **body**.
+
+#### Message Body Serialization
+
+Serialization of **body** is implement by [protobuf](https://developers.google.com/protocol-buffers/ "protobuf").
+
+The protobuf definition file for this websocket can be obtained from the right link: [websocket-protobuf.json](protobuf_en.json "websocket-protobuf")
+
+**The serialized byte order of the protobuf is a small-end byte order**
+
+### Pseudo Code Examples
+
+For example, "subscribe market depth ", **body** is defined as follows
+
+```protobuf
+//SendCommand,906| Subscribe market depth
+message SubMarketDepth{
     //market
-    Required string Market= 1 ;
-    // decimal precision
-    Required int32 Precision= 2 ;
-    //Get the number of rows, the optional value is: 10,20,40
-    Required int32 Limit= 3 ;
+    required string Market= 1 ;
+    // precision of price Example: 2 means 2 decimal digits。Need to refer to the price precision of the market. If the price precision is greater than 2, the value range is [priceprecision-4,priceprecision],no] and the range is [0,priceprecision]
+    required int32 Precision= 2 ;
+    // Get the number of bars, the optional value is: 10, 20, 40
+    required int32 Limit= 3 ;
 }
-Message MarketDepthList{
-    // Market depth list
-    Repeated MarketDepthDto List= 1 ;
-}
-// Depth snapshot of market
-Message MarketDepthDto{
+
+//ReceiveCommand,1003| Market depth snapshot
+message MarketDepthDto{
     //market
-    Required string Market= 1 ;
-    //Accuracy
-    Required int32 Precision= 2 ;
-    //Sell list
-    Repeated MarketDepth AskList= 3 ;
-    // Pay List
-    Repeated MarketDepth BidList= 4 ;
+    required string Market= 1 ;
+    // precision of price
+    required int32 Precision= 2 ;
+    //list of ask orders
+    repeated MarketDepth AskList= 3 ;
+    //list of bid orders
+    repeated MarketDepth BidList= 4 ;
     //version number
-    Required int64 Version= 5 ;
+    required int64 Version= 5 ;
+}
+// Single market depth
+message MarketDepth{
+    //price
+    required double P= 1 ;
+    //volume
+    required double V= 2 ;
+}
+//ReceiveCommand,1004| Market depth difference information.
+message MarketDepthDiff{
+    //market
+    required string Market= 1 ;
+    // precision of price
+    required int32 Precision= 2 ;
+    //ask order difference list
+    repeated MarketDepth AskList= 3 ;
+    //bid order difference list
+    repeated MarketDepth BidList= 4 ;
+    // starting version number
+    required int64 StartVersion= 5 ;
+    // end version number
+    required int64 EndVersion= 6 ;
+}
+// Single market depth
+message MarketDepth{
+    // price
+    required double P= 1 ;
+    // volume
+    required double V= 2 ;
 }
 ```
 
-Send code (pseudo code) as follows
+Send method (pseudo code) as follows：
 
-```
-Websocket ws;
-Protobuf protbuf;
-Int16 SendCommand = 906; // command: subscribe to market depth
-Int32 route = 1; //route
+```javascript
+websocket ws;
+protobuf protbuf;
+int16 SendCommand = 906; //Command: Subscribe to market depth
+int32 route = 1; //Router
 SubMarketDepth subMarket;
 subMarket.Market = "eth_btc";
 subMarket.Precision = 8;
 subMarket.Limit = 10;
 
-Ws.send(byteof(route)+byteof(SendCommand)+protbuf.Serialize(subMarket));
+ws.send(byteof(route)+byteof(SendCommand)+protbuf.Serialize(subMarket));
 ```
 
-Receive code (pseudo-code) as follows
+Receive method (pseudo code) as follows：
 
 ```
-OnWebsocketReceived(byte[] data){
-The
-Int16 receiveCommand = ConvertToInt16(data.sub(0,2))
-Switch(receiveCommand)
-Case 1003
-MarketDepthList dto = protbuf.Deserialize(data.sub(2,data.length))
-//Business code
-...
+function OnWebsocketReceived (byte[] data) {
+    int16 receiveCommand = ConvertToInt16（data.sub(0,2))
+    switch(receiveCommand)
+    case 1003:
+        MarketDepthList dto = protbuf.Deserialize(data.sub(2,data.length));
+    // Business code
+    break;
 }
 ```
 
---------------------------------------------------------------------------------
+### Market ID
 
-### function list
+The market ID consists of two parts, a basic currency and a target currency, separated by an underscore in the middle.
 
-Function                                   | Submit Command | Receive Command | Use
------------------------------------------- | -------------- | --------------- | ----------------------------------------------------------------------------------------------
-Sign up for auction.                       | 907            | 1005            |
-Get bulk K line data (subscribe)           | 900            | 1000,1001, 1002 | K line chart                                                                                   | 1000 single newest k line, 1001 part history k line, 1002 batch k line data push completed
-Subscribe to the latest single K-line data | 902            | 1000            | K-line chart / Frequencys Optional "1", "5", "15", "30", "60", "180", "360", "720" , "D", "7D"
-Subscribe to 24-hour rolling Quotes        | 902            | 1006            | Currency Trading - Market Quotes, Home                                                         | Frequencys to SD1
-Subscription Market Depth                  | 906            | 1003,1004       | Currency Transactions - Latest Price                                                           | 1003 Depth Snapshot, 1004 Depth Difference Data
-Subscribe to Personal Order Messages       | 1000           | 1008,1009,1010  | Update Currency Transactions - Current Orders                                                  | 1008 Order Creation, 1009 Order Updates, 1010 Planned Order Triggering
-Error message                              |                | 0               | error message                                                                                  |
+For example, btc_usdt means that the basic currency is the usdt target currency btc.
 
-## API Reference
+### Time Format
 
-### Quotes API
+the format of time as an incoming or outgoing parameter refers to the following API is Unix timestamp seconds.
 
-Subscribe transaction record
+For example:time 2018/7/9 15:25:13 in Beijing is 1531121113 as Unix timestamp seconds.
 
-**Request message**
+Developers can use this link on the right to find the method of getting Unix timestamp seconds in some program language:<https://www.epochconverter.com/>
 
-**Route: 1** **Command: 907** Request parameters:
+## Features
 
-```
-Message GetTopTradeList{
+Feature                                        | SendCommand | ReceiveCommand
+---------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------
+Subscribe to the transaction record            | 907         | 1005
+Get batch K line data (subscribe)              | 900         | 1000 single latest k line, 1001 part history k line, 1002 batch k line data push completed
+Subscribe to the latest single K-line data     | 902         | 1000
+Subscribe to the 24-hour rolling market quotes | 902         | 1006
+Subscribe to Market Depth                      | 906         | 1003 Depth Snapshot, 1004 Depth difference
+Subscribe to Individual Order Messages         | 1000        | 1008 Order Creation, 1009 Order Update, 1010 Stop-Limit Order Stopped
+Error message                                  |             | 0
+
+## Public API
+
+### Subscribe to the Transaction Record
+
+#### Request Message
+
+**router：1** **command：907**
+
+```protobuf
+//SendCommand,907| Get the latest deal list
+message GetTopTradeList{
     //market
-    Required string Market= 1 ;
-    //Quantity
-    Required int32 Count= 2 ;
+    required string Market= 1 ;
+    //quantity
+    required int32 Count= 2 ;
     // subscribed
-    Required bool Subscribe= 3 ;
+    required bool Subscribe= 3 ;
 }
 ```
 
-Parameter Description
+Name      | Type   | Description                                             | Required | protobuf tag
+:-------- | :----- | ------------------------------------------------------- | -------- | ------------
+market    | string | market                                                  | Yes      | 1
+count     | string | number of list at first, range itn [10,99]              | Yes      | 2
+subscribe | bool   | if true , you will receive latest deal list from now on | Yes      | 3
 
-Parameter Name | Type   | Description                            | Required | Protobuf Sequence
-:------------- | :----- | -------------------------------------- | -------- | -----------------
-market         | string | Market Trading Pair                    | Yes      | 1
-Count          | string | The number of subscriptions (up to 99) | Yes      | 2
-subscribe      | bool   | To Subscript?                          | Yes      | 3
+#### Received Message
 
-**Receive message**
+**command：1005**
 
-**Command: 1005**
-
-```
-Message TradeSimpleDtoList{
-    //Transaction data
-    Repeated TradeSimpleData List= 1 ;
+```protobuf
+//ReceiveCommand,1005| Recent Deal List
+message TradeSimpleDtoList{
+    //Recent deal list
+    repeated TradeSimpleData List= 1 ;
 }
-// transaction information
-Message TradeSimpleData{
+// Deal information
+message TradeSimpleData{
     //market
-    Required string Market= 1 ;
-    // transaction Id
-    Required int64 Id= 2 ;
-    //final price
-    Required double Price= 3 ;
-    / Volume
-    Required double Volume= 4 ;
-    // turnover
-    Required double Amount= 5 ;
-    / / Change type
-    Required int32 Trend= 6 ;
-    // transaction time
-    Required int64 CreateTime= 7 ;
+    required string Market= 1 ;
+    //Transaction Id
+    required int64 Id= 2 ;
+    // deal price
+    required double Price= 3 ;
+    // volume
+    required double Volume= 4 ;
+    // amount
+    required double Amount= 5 ;
+    // price trend
+    required int32 Trend= 6 ;
+    // deal time
+    required int64 CreateTime= 7 ;
 }
 ```
 
-Parameter Name | Type   | Description                          | Protobuf Sequence
-:------------- | :----- | ------------------------------------ | -----------------
-market         | string | Market Trading Pair                  | 1
-Id             | string |                                      | 2
-Price          | double | sale price                           | 3
-Volume         | double | Volume                               | 4
-Amount         | double | Trade value                          | 5
-Trend          | int    | Types of Change (1 up 2 down 3 flat) | 6
-CreateTime     | long   | time                                 | 7
+Name       | Type   | Description                     | protobuf tag
+:--------- | :----- | ------------------------------- | ------------
+market     | string | market id                       | 1
+Id         | string | transaction Id                  | 2
+Price      | double | deal price                      | 3
+Volume     | double | deal volume                     | 4
+Amount     | double | deal amount                     | 5
+Trend      | int    | price trend（1:up,2:down,3:flat） | 6
+CreateTime | long   | deal time                       | 7
 
---------------------------------------------------------------------------------
+### Get batch K line data (subscribe)
 
-Request k line history **Request message**
+The history of the K-line through the bulk of the way to send, will be in order to send a number of times the K-line data, and sent in the final send the results.
 
-**Route: 1** **Command: 900** Request parameters:
+#### Request Message
 
-```
-Message GetKLineList{
+**router：1** **command：900**
+
+```protobuf
+//SendCommand,900| Subscribe to the market batch K line
+message GetKLineList{
     //market
-    Required string Market= 1 ;
+    required string Market= 1 ;
     //K line type
-    Required string Frequency= 2 ;
+    required string Frequency= 2 ;
     //Starting time
-    Required int64 Start= 3 ;
+    required int64 Start= 3 ;
     //End Time
-    Required int64 End= 4 ;
-    // subscribed
-    Required bool Subscribe= 5 [default = true];
+    required int64 End= 4 ;
+    //Do you subscribe?
+    required bool Subscribe= 5 [default = true];
 }
 ```
 
-Parameter Description
+参数Description
 
-Parameter Name | Type   | Description                                                                             | Required | Protobuf Sequence
-:------------- | :----- | --------------------------------------------------------------------------------------- | -------- | -----------------
-market         | string | Market Trading Pair                                                                     | Yes      | 1
-frequency      | string | Frequencys Optional values ​​"1", "5", "15", "30", "60", "180", "360", "720", "D", "7D" | yes      | 2
-start          | long   | Query start time                                                                        | Yes      | 3
-end            | long   | End of time                                                                             | Yes      | 4
-subscribe      | bool   | Subscript k line after request                                                          | No       | 5
+Name      | Type   | Description                                                                                                                                        | Required | protobuf tag
+:-------- | :----- | -------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------
+market    | string | market id                                                                                                                                          | Yes      | 1
+frequency | string | Frequency, Optional values: "1", "5", "15", "30", "60", "180", "360", "720", "D", "7D". It means 1 minute, 5 minutes...720 minutes, 1 day, 7 days. | Yes      | 2
+start     | long   | start time                                                                                                                                         | Yes      | 3
+end       | long   | end time                                                                                                                                           | Yes      | 4
+subscribe | bool   | subscribe to lastest single K line from now on                                                                                                     | No       | 5
 
-**Receive message**
+#### Received Message
 
-**Command: 1001**
+**command：1001**
 
-```
-Message WsKLineList{
+```protobuf
+//ReceiveCommand,1001| Batch K line data
+message WsKLineList{
     //K line data
-    Repeated WsKLine List= 1 ;
+    repeated WsKLine List= 1 ;
 }
-
-Message WsKLine{
-    //market
-    Required string Market= 1 ;
-    //K line type
-    Required string Frequency= 2 ;
-    / Volume
-    Required double Volume= 3 ;
-    //Opening price
-    Required double OpenPrice= 4 ;
-    //Closing price
-    Required double ClosedPrice= 5 ;
-    //lowest price
-    Required double LowPrice= 6 ;
-    // highest price
-    Required double HighPrice= 7 ;
-    //Opening time
-    Required int64 OpenTime= 8 ;
-}
-```
-
-Parameter Description
-
-Parameter Name | Type   | Description                                                                             | Protobuf Sequence
-:------------- | :----- | --------------------------------------------------------------------------------------- | -----------------
-market         | string | Market Trading Pair                                                                     | 1
-frequency      | string | Frequencys Optional values ​​"1", "5", "15", "30", "60", "180", "360", "720", "D", "7D" | 2
-volume         | double | Volume                                                                                  | 3
-openPrice      | double | Opening price                                                                           | 4
-closedPrice    | double | close price                                                                             | 5
-lowPrice       | double | lowest                                                                                  | 6
-highPrice      | double | highest price                                                                           | 7
-openTime       | long   | Opening Time                                                                            | 8
-
-**Command: 1002** //Data reception completed
-
-```
-Message BatchSendComplate{
-    //market
-    Required string Market= 1 ;
-    //K line type
-    Required string Frequency= 2 ;
-    //
-    Required int64 Start= 3 ;
-    //
-    Required int64 End= 4 ;
-    // Whether to reach the starting position of the K line
-    Required bool IsStart= 5 ;
-}
-```
-
-Parameter Description
-
-Parameter Name | Type   | Description                                                    | Protobuf Sequence
-:------------- | :----- | -------------------------------------------------------------- | -----------------
-market         | string | Market Trading Pair                                            | 1
-frequency      | string | Frequencys Values ​​1, 5, 15, 15, 30, 60, 180, 360, 720, D, 7D | 2
-start          | long   | Query start time                                               | 3
-end            | long   | End of query                                                   | 4
-isStart        | bool   | Has taken all historical k lines                               | 5
-
---------------------------------------------------------------------------------
-
-Subscribe k-line
-
-**Request message**
-
-**Route: 1** **Command: 902** Request parameters:
-
-```
-Message SubKLine{
-    //Subscription details
-    Repeated SubKLineItem Items= 1 ;
-}
-//K line subscription parameters
-Message SubKLineItem{
-    //market
-    Required string Market= 1 ;
-    //K line type
-    Repeated string Frequencys= 2 ;
-}
-```
-
-Parameter Description
-
-Parameter Name | Type   | Description                                                                             | Required | Protobuf Sequence
-:------------- | :----- | --------------------------------------------------------------------------------------- | -------- | -----------------
-market         | string | Market Trading Pairs                                                                    | Yes      | 1
-frequency      | string | Frequencys Optional values ​​"1", "5", "15", "30", "60", "180", "360", "720", "D", "7D" | yes      | 2
-
-**Receive message**
-
-**Command: 1000**
-
-```
+// K line data
 message WsKLine{
     //market
     required string Market= 1 ;
-    //Opening price
-    required double OpenPrice= 2 ;
-    //Closing price
-    required double ClosedPrice= 3 ;
-    //lowest price
-    required double LowPrice= 4 ;
-    // highest price
-    required double HighPrice= 5 ;
-    // Volume
-    required double Volume= 6 ;
-}
-```
-
-Parameter Name | Type   | Description          | Protobuf Sequence
-:------------- | :----- | -------------------- | -----------------
-market         | string | Market Trading Pairs | 1
-openPrice      | double | Opening price        | 2
-closedPrice    | double | close price          | 3
-lowPrice       | double | lowest               | 4
-highPrice      | double | highest price        | 5
-volume         | double | Volume               | 6
-
---------------------------------------------------------------------------------
-
-Subscribe 24-hour rolling market
-
-**Request message**
-
-**Route: 1** **Command: 902** Request parameters:
-
-```
-Message SubKLine{
-    //Subscription details
-    Repeated SubKLineItem Items= 1 ;
-}
-//K line subscription parameters
-Message SubKLineItem{
-    //market
-    Required string Market= 1 ;
     //K line type
-    Repeated string Frequencys= 2 ;
-}
-```
-
-Parameter Description
-
-Parameter Name | Type   | Description                                                     | Required | Protobuf Sequence
-:------------- | :----- | --------------------------------------------------------------- | -------- | -----------------
-market         | string | Market Trading Pair                                             | Yes      | 1
-frequency      | string | Frequencys can only be SD1 (to distinguish from normal k-lines) | YES      | 2
-
-**Receive message**
-
-**Command: 1000**
-
-```
-Message WsKLine{
-    //market
-    Required string Market= 1 ;
-    //K line type
-    Required string Frequency= 2 ;
-    / Volume
-    Required double Volume= 3 ;
+    required string Frequency= 2 ;
+    // volume
+    required double Volume= 3 ;
     //Opening price
-    Required double OpenPrice= 4 ;
+    required double OpenPrice= 4 ;
     //Closing price
-    Required double ClosedPrice= 5 ;
+    required double ClosedPrice= 5 ;
     //lowest price
-    Required double LowPrice= 6 ;
-    // highest price
-    Required double HighPrice= 7 ;
+    required double LowPrice= 6 ;
+    //highest price
+    required double HighPrice= 7 ;
     //Opening time
-    Required int64 OpenTime= 8 ;
+    required int64 OpenTime= 8 ;
 }
 ```
 
-Parameter Name | Type   | Description                                                                             | Protobuf Sequence
-:------------- | :----- | --------------------------------------------------------------------------------------- | -----------------
-market         | string | Market Trading Pairs                                                                    | 1
-frequency      | string | Frequencys Optional values ​​"1", "5", "15", "30", "60", "180", "360", "720", "D", "7D" | 2
-volume         | double | Volume                                                                                  | 3
-openPrice      | double | Opening price                                                                           | 4
-closedPrice    | double | close price                                                                             | 5
-lowPrice       | double | lowest                                                                                  | 6
-highPrice      | double | highest price                                                                           | 7
-openTime       | long   | Opening Time                                                                            | 8
+Name        | Type   | Description                                                                                                                                        | protobuf tag
+----------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------
+market      | string | market id                                                                                                                                          | 1
+frequency   | string | Frequency, Optional values: "1", "5", "15", "30", "60", "180", "360", "720", "D", "7D". It means 1 minute, 5 minutes...720 minutes, 1 day, 7 days. | 2
+volume      | double | deal volume                                                                                                                                        | 3
+openPrice   | double | open price                                                                                                                                         | 4
+closedPrice | double | last price                                                                                                                                         | 5
+lowPrice    | double | low price                                                                                                                                          | 6
+highPrice   | double | high price                                                                                                                                         | 7
+openTime    | long   | open time                                                                                                                                          | 8
 
---------------------------------------------------------------------------------
+**command：1002**
 
-Subscript market depth
-
-Market depth subscription is differential data pushing. The first pushing will return full data as snapshot, and then only differential data will be pushed.
-
-Difference comparison method: 1\. Newly price, add new depth to snapshot. 2\. The price existed in snapshot, the number of V is not 0, which means to update depth in snapshot. The number of v is 0, which means to delete depth in snapshot . =====If StartVersion is different from snapshot Version, you need to re-subscript market depth
-
-**Request message**
-
-**Route: 1** **Command: 906** Request parameters:
-
-```
-Message SubMarketDepth{
+```protobuf
+//ReceiveCommand, 1002| K line data batch transmission completed
+message BatchSendComplate{
     //market
-    Required string Market= 1 ;
-    // decimal precision
-    Required int32 Precision= 2 ;
-    //Get the number of rows, the optional value is: 10,20,40
-    Required int32 Limit= 3 ;
+    required string Market= 1 ;
+    //K line type
+    required string Frequency= 2 ;
+    //Starting time
+    required int64 Start= 3 ;
+    //deadline
+    required int64 End= 4 ;
+    // Whether to reach the starting point of the K line
+    required bool IsStart= 5 ;
 }
 ```
 
-Parameter Description
+Name      | Type   | Description                                                                                                                                        | protobuf tag
+--------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------
+market    | string | market id                                                                                                                                          | 1
+frequency | string | Frequency, Optional values: "1", "5", "15", "30", "60", "180", "360", "720", "D", "7D". It means 1 minute, 5 minutes...720 minutes, 1 day, 7 days. | 2
+start     | long   | start time                                                                                                                                         | 3
+end       | long   | end time                                                                                                                                           | 4
+isStart   | bool   | You've reached the starting point of the K-line if true                                                                                            | 5
 
-Parameter Name | Type   | Description                                        | Required | Protobuf Sequence
-:------------- | :----- | -------------------------------------------------- | -------- | -----------------
-market         | string | Market Trading Pairs                               | Yes      | 1
-precision      | int    | Decimal precision                                  | Yes      | 2
-limit          | int    | Number of entries, the optional value is: 10,20,40 | Yes      | 3
+### Subscribe to the latest single K-line data
 
-**Receive message**
+#### Request Message
 
-**Command: 1003** //depth snapshot, will be pushed once for the first subscription
+**router：1** **command：902**
 
-```
-Message MarketDepthList{
-    // Market depth list
-    Repeated MarketDepthDto List= 1 ;
+```protobuf
+//SendCommand, 902| Subscribe to the K line
+message SubKLine{
+    //Subscription details
+    repeated SubKLineItem Items= 1 ;
 }
-// Depth snapshot of market
-Message MarketDepthDto{
+// K line subscription parameters
+message SubKLineItem{
     //market
-    Required string Market= 1 ;
-    //Accuracy
-    Required int32 Precision= 2 ;
-    //Sell list
-    Repeated MarketDepth AskList= 3 ;
-    // Pay List
-    Repeated MarketDepth BidList= 4 ;
+    required string Market= 1 ;
+    //K line type
+    repeated string Frequencys= 2 ;
+}
+```
+
+Name       | Type     | Description                                                                                                                                        | Required | protobuf tag
+:--------- | :------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------
+market     | string   | market id                                                                                                                                          | Yes      | 1
+frequencys | string[] | Frequency, Optional values: "1", "5", "15", "30", "60", "180", "360", "720", "D", "7D". It means 1 minute, 5 minutes...720 minutes, 1 day, 7 days. | Yes      | 2
+
+#### Received Message
+
+**command：1000**
+
+```protobuf
+//ReceiveCommand, 1000| K-line data
+message WsKLine{
+    //market
+    required string Market= 1 ;
+    //K line type
+    required string Frequency= 2 ;
+    // volume
+    required double Volume= 3 ;
+    //Opening price
+    required double OpenPrice= 4 ;
+    //Closing price
+    required double ClosedPrice= 5 ;
+    //lowest price
+    required double LowPrice= 6 ;
+    //highest price
+    required double HighPrice= 7 ;
+    //Opening time
+    required int64 OpenTime= 8 ;
+}
+```
+
+Name        | Type   | Description                                                                                                                                        | protobuf tag
+----------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------
+market      | string | market id                                                                                                                                          | 1
+frequency   | string | Frequency, Optional values: "1", "5", "15", "30", "60", "180", "360", "720", "D", "7D". It means 1 minute, 5 minutes...720 minutes, 1 day, 7 days. | 2
+volume      | double | deal volume                                                                                                                                        | 3
+openPrice   | double | open price                                                                                                                                         | 4
+closedPrice | double | last price                                                                                                                                         | 5
+lowPrice    | double | low price                                                                                                                                          | 6
+highPrice   | double | high price                                                                                                                                         | 7
+openTime    | long   | open time                                                                                                                                          | 8
+
+### Subscribe to the 24-hour rolling market quotes
+
+#### Request Message
+
+**router：1** **command：902**
+
+```protobuf
+//SendCommand, 902| Subscribe to the K line
+message SubKLine{
+    //Subscription details
+    repeated SubKLineItem Items= 1 ;
+}
+// K line subscription parameters
+message SubKLineItem{
+    //market
+    required string Market= 1 ;
+    //K line type
+    repeated string Frequencys= 2 ;
+}
+```
+
+Name       | Type     | Description                        | Required | protobuf tag
+:--------- | :------- | ---------------------------------- | -------- | ------------
+market     | string   | market id                          | Yes      | 1
+frequencys | string[] | Frequency, value can be 'SD1' only | Yes      | 2
+
+#### Received Message
+
+**command：1006**
+
+```protobuf
+//ReceiveCommand, 1000| K-line data
+message WsKLine{
+    //market
+    required string Market= 1 ;
+    //K line type
+    required string Frequency= 2 ;
+    // volume
+    required double Volume= 3 ;
+    //Opening price
+    required double OpenPrice= 4 ;
+    //Closing price
+    required double ClosedPrice= 5 ;
+    //lowest price
+    required double LowPrice= 6 ;
+    //highest price
+    required double HighPrice= 7 ;
+    //Opening time
+    required int64 OpenTime= 8 ;
+}
+```
+
+Name        | Type   | Description | protobuf tag
+:---------- | :----- | ----------- | ------------
+market      | string | market id   | 1
+openPrice   | double | open price  | 2
+closedPrice | double | last price  | 3
+lowPrice    | double | low price   | 4
+highPrice   | double | high price  | 5
+volume      | double | deal volume | 6
+
+### Subscribe to Market Depth
+
+The push of the depth data is based on an incremental push.
+
+After the subscription depth is pushed to the full amount of data, then the incremental data is pushed.
+
+#### Method for Depth Incremental Update
+
+Deep incremental updates are mainly divided into the "Data update" and "version comparison" two sections.
+
+##### Data Update
+
+To illustrate the convenience, it is assumed that the first push to obtain the market depth is as follows：
+
+bid volume | bid price | ask price | ask volume
+---------- | --------- | --------- | ----------
+100        | 50        | 90        | 600
+90         | 40        | 100       | 500
+80         | 30        | 110       | 400
+
+The following three cases of depth change are described below.
+
+###### Add
+
+If the depth increment data is
+
+ask price | ask volume
+--------- | ----------
+80        | 600
+
+This price is not in the original depth, it belongs to the new depth, therefore, the depth should be updated to：
+
+bid volume | bid price | ask price | ask volume
+---------- | --------- | --------- | ----------
+100        | 50        | 80        | 600
+90         | 40        | 90        | 600
+80         | 30        | 100       | 500
+           |           | 110       | 400
+
+###### Update
+
+If the depth increment data is
+
+ask price | ask volume
+--------- | ----------
+90        | 233
+
+This price exists at the original depth and is the data that updates the corresponding price, so the depth should be updated to：
+
+bid volume | bid price | ask price | ask volume
+---------- | --------- | --------- | ----------
+100        | 50        | 90        | 233
+90         | 40        | 100       | 500
+80         | 30        | 110       | 400
+
+###### Delete
+
+If the depth increment data is
+
+ask price | ask volume
+--------- | ----------
+90        | 0
+
+This price exists at the original depth, and the quantity is already 0, the depth data is deleted, so the depth should be updated to：
+
+bid volume | bid price | ask price | ask volume
+---------- | --------- | --------- | ----------
+100        | 50        | 100       | 500
+90         | 40        | 110       | 400
+80         | 30        |           |
+
+##### Version Comparison
+
+Both the depth snapshot and the depth increment will return the corresponding version information.
+
+Developer needs to compare the versions after obtaining the version to ensure the correctness of the deep data update. Divided into two categories:
+
+###### Comparison of snapshots and increments
+
+The depth snapshot data contains the Version field.
+
+The first increment of data contains startversion and endversion two fields.
+
+Compare the Version field of the depth snapshot data to the Startversion field of the incremental data
+
+If two fields are not equal, the increment is lost, requiring the developer to subscribe to the incremental data.
+
+###### Comparison of increment and increment
+
+The incremental data contains startversion and endversion two fields.
+
+Compare the previous increment's Endversion field with the value of the last Startversion field.
+
+If two fields are not equal, the increment is lost, requiring the developer to subscribe to the incremental data.
+
+#### Request Message
+
+**router：1** **command：906**
+
+```protobuf
+//SendCommand,906| Subscribe to market depth
+message SubMarketDepth{
+    //market
+    required string Market= 1 ;
+    // decimal place precision
+    required int32 Precision= 2 ;
+    // Get the number of bars, the optional value is: 10, 20, 40
+    required int32 Limit= 3 ;
+}
+```
+
+Name      | Type   | Description                             | Required | protobuf tag
+--------- | ------ | --------------------------------------- | -------- | ------------
+market    | string | market id                               | Yes      | 1
+precision | int    | precision of price                      | Yes      | 2
+limit     | int    | number of data，optional value ：10,20,40 | Yes      | 3
+
+#### Received Message
+
+**command：1003**
+
+```protobuf
+//ReceiveCommand,1003| Market depth snapshot
+message MarketDepthDto{
+    //market
+    required string Market= 1 ;
+    //Price accuracy
+    required int32 Precision= 2 ;
+    //list of sell orders
+    repeated MarketDepth AskList= 3 ;
+    //Buy list
+    repeated MarketDepth BidList= 4 ;
     //version number
-    Required int64 Version= 5 ;
+    required int64 Version= 5 ;
 }
-Message MarketDepth{
+// Single market depth
+message MarketDepth{
     //unit price
-    Required double P= 1 ;
-    //Quantity
-    Required double V= 2 ;
+    required double P= 1 ;
+    //quantity
+    required double V= 2 ;
 }
 ```
 
-Parameter Name | Type   | Description          | Protobuf Sequence
-:------------- | :----- | -------------------- | -----------------
-market         | string | Market Trading Pairs | 1
-precision      | string | Market accuracy      | 2
-askList        | array  | unit price           | 3
-bidList        | array  | Quantity             | 4
-version        | long   | version number       | 5
-p              | double | price                | 1
-v              | double | Quantity             | 2
+Name      | Type   | Description                         | protobuf tag
+:-------- | :----- | ----------------------------------- | ------------
+market    | string | market id                           | 1
+precision | string | precision of price                  | 2
+askList   | array  | ask list, price in ascending order  | 3
+bidList   | array  | bid list, price in descending order | 4
+version   | long   | version                             | 5
+p         | double | price                               | 1
+v         | double | volume                              | 2
 
-**Command: 1004** //depth difference
+**command：1004**
 
-```
-// Market depth difference information. Difference comparison method: 1\. Newly appeared price, indicating new depth. 2\. The price that has already appeared, the number of pending orders is not 0, which means that the updated price has appeared. The number of pending orders is 0, indicating that the depth is deleted. =====If the versions of StartVersion and Market Depth snapshot are different, you need to re-acquire a market depth snapshot
-Message MarketDepthDiff{
+```protobuf
+//ReceiveCommand,1004| Market depth difference information.
+message MarketDepthDiff{
     //market
-    Required string Market= 1 ;
-    //Accuracy
-    Required int32 Precision= 2 ;
-    // Selling Difference List
-    Repeated MarketDepth AskList= 3 ;
-    // Pay the difference list
-    Repeated MarketDepth BidList= 4 ;
-    //Start version number
-    Required int64 StartVersion= 5 ;
-    // deadline version number
-    Required int64 EndVersion= 6 ;
+    required string Market= 1 ;
+    // precision
+    required int32 Precision= 2 ;
+    //Sell order difference list
+    repeated MarketDepth AskList= 3 ;
+    //Buy order difference list
+    repeated MarketDepth BidList= 4 ;
+    // starting version number
+    required int64 StartVersion= 5 ;
+    //cutoff version number
+    required int64 EndVersion= 6 ;
 }
-Message MarketDepth{
+// Single market depth
+message MarketDepth{
     //unit price
-    Required double P= 1 ;
-    //Quantity
-    Required double V= 2 ;
+    required double P= 1 ;
+    //quantity
+    required double V= 2 ;
 }
 ```
 
-Parameter Name | Type   | Description            | Protobuf Sequence
-:------------- | :----- | ---------------------- | -----------------
-market         | string | Market Trading Pairs   | 1
-precision      | string | Market Accuracy        | 2
-askList        | array  | sell                   | 3
-bidList        | array  | Buy                    | 4
-startVersion   | double | Beginning Version      | 5
-endVersion     | double | Current version number | 6
-p              | double | price                  | 1
-v              | double | Quantity               | 2
+Name         | Type   | Description                         | protobuf tag
+:----------- | :----- | ----------------------------------- | ------------
+market       | string | market id                           | 1
+precision    | int    | precision of price                  | 2
+askList      | array  | ask list, price in ascending order  | 3
+bidList      | array  | bid list, price in descending order | 4
+startVersion | double | start version                       | 5
+endVersion   | double | end version                         | 6
+p            | double | price                               | 1
+v            | double | volume                              | 2
 
---------------------------------------------------------------------------------
+### Error message
 
-### Private API
+#### Request Message
 
-Each request requires the construction of a signature parameter sign and an Authorization parameter
+none
 
-### signature
+#### Received Message
 
-Get api: Please create api in the Account Settings -> Api Management -> create an API, create an Apikey and Secret Key, please properly manage, **Important: These two keys and account security are closely related, whenever Do not disclose it to others.**
+**command：0**
 
-**Apikey is used to identify the user. Add the Authorization=Apikey parameter in the ws uri.**
-
-**Secrect Key is used to generate sign parameters**
-
-**sign generation method:** Use Secret Key as key, Authorization=Apikey as value to calculate HmacSHA256
-
-example
-
-APIKey=81.67AAA2F6041D408D9868387A8904431D, Authorization parameters are as follows
-
-```
-Authorization=81.67AAA2F6041D408D9868387A8904431D
-```
-
-If the Secret Key is 2288987EFDB54F848D7BACCE1288FC9A, the sign value is calculated.
-
-```
-57c4c6770d565aa236f87706053bd51512862443062e471bd3243a6ed8eef2
-```
-
-The final generated ws address: Wss://ws.azex.io?Authorization=81.67AAA2F6041D408D9868387A8904431D&sign=57c4c6770d565aa236f87706053bd51512862443062e471bd3243a6ed8eef2
-
---------------------------------------------------------------------------------
-
-Subscribe to personal orders (order creation message, order update message, plan trigger message)
-
-**Request message**
-
-**Route: 1** **Command: 1000** Request parameters:
-
-```
-//log into the market
-Message LoginToMarket{
-    //market
-    Required string Market= 1 ;
-}
-```
-
-Parameter Description
-
-Parameter Name | Type   | Description         | Required | Protobuf Sequence
-:------------- | :----- | ------------------- | -------- | -----------------
-market         | string | Market Trading Pair | Yes      | 1
-
-**Receive message**
-
-**Command: 1008** //Add order message
-
-```
-//order information
-Message OrderInfoDto{
-    //Order Id
-    Required string Id= 1 ;
-    //User Id
-    Required int64 UserId= 2 ;
-    //Currency
-    Required string Currency= 3 ;
-    //Currency Currency
-    Required string FeeCurrency= 4 ;
-    //market
-    Required string Market= 5 ;
-    //Order classification
-    Required int32 Category= 6 ;
-    //sales category
-    Required int32 OrderType= 7 ;
-    // Plan category
-    Required int32 PlanType= 8 ;
-    // Trigger price
-    Required double TriggerPrice= 9 ;
-    // Limit price unit price
-    Required double Price= 10 ;
-    // limit order quantity
-    Required double Volume= 11 ;
-    // Market Order Amount
-    Required double Amount= 12 ;
-    //Order Status
-    Required int32 Status= 13 ;
-    //Create time
-    Required int64 CreateTime= 14 ;
-}
-```
-
-**Parameter Description**
-
-Parameter Name | Type   | Description                                                      | Protobuf Sequence
-:------------- | :----- | ---------------------------------------------------------------- | -----------------
-id             | string | Order id                                                         | 1
-userId         | long   | user id                                                          | 2
-currency       | string | Currency                                                         | 3
-feeCurrency    | string | Fee Currency                                                     | 4
-market         | string | Marketing                                                        | 5
-category       | int    | Order Classification (1 unscheduled order, 2 planned order)      | 6
-orderType      | int    | Order Type (1 Limit Buy 2 Market Buy 3 Limit Sell 4 Market Sell) | 7
-planType       | int    | Plan Type (1 High Trigger 2 Low Trigger)                         | 8
-triggerPrice   | double | trigger price                                                    | 9
-price          | double | hanging price                                                    | 10
-volume         | double | coin quantity                                                    | 11
-amount         | double | Order total price                                                | 12
-status         | int    | Order Status (3 orders completed in 2 transactions cancelled 4)  | 13
-createTime     | long   | time                                                             | 14
-
-**Command: 1009** // Update order message
-
-```
-//Update order information
-Message UpdateOrderInfo{
-    // highest price
-    Required string Market= 1 ;
-    //Order Id
-    Required string OrderId= 2 ;
-    //Trading volume
-    Required double TxVolume= 3 ;
-    //Transaction amount
-    Required double TxAmount= 4 ;
-    //Order Status
-    Required int32 Status= 5 ;
-    //Update time
-    Required int64 UpdateTime= 6 ;
-}
-```
-
-**Parameter Description**
-
-Parameter Name | Type   | Description                                                     | Protobuf Sequence
-:------------- | :----- | --------------------------------------------------------------- | -----------------
-market         | string | Market Trading Pairs                                            | 1
-orderId        | string | Order id                                                        | 2
-txVolume       | double | Trade Volume                                                    | 3
-txAmount       | double | Transaction Amount                                              | 4
-status         | int    | Order Status (3 orders completed in 2 transactions cancelled 4) | 5
-updateTime     | long   | Updated Time                                                    | 6
-
-**Command: 1010** //Single-shot message
-
-```
-Message PlanOrderTrigger{
-    //market
-    Required string Market= 1 ;
-    //planned order ID
-    Required string Id= 2 ;
-    // Trigger price
-    Required double Price= 3 ;
-    //User Id
-    Required int64 UserId= 4 ;
-}
-```
-
-**Parameter Description**
-
-Parameter Name | Type   | Description          | Protobuf Sequence
-:------------- | :----- | -------------------- | -----------------
-market         | string | Market Trading Pairs | 1
-id             | string | Plan ID id           | 2
-price          | double | trigger price        | 3
-userId         | double | user id              | 4
-
---------------------------------------------------------------------------------
-
-Error message
-
-**Receive message** **Command: 0**
-
-```
-Message WsError{
+```protobuf
+//ReceiveCommand,0| error message
+message WsError{
     //error code
-    Required int32 Code= 1 ;
+    required int32 Code= 1 ;
     //Error message
-    Required string Message= 2 ;
+    required string message= 2 ;
 }
 ```
+
+## Personal APIs
+
+Calling the user API requires authentication information to be invoked. Please refer [How To Get OpenApi And Use It](?file=002-English/001-How%20To%20Get%20OpenApi%20And%20Use "How To Get OpenApi And Use It") at first.
+
+### Subscribe to Individual Order Messages
+
+#### Request Message
+
+**router：1** **command：1000**
+
+```protobuf
+//SendCommand, 1000| Login to the market
+message LoginToMarket{
+    //market
+    required string Market= 1 ;
+}
+```
+
+Name   | Type   | Description | Required | protobuf tag
+:----- | :----- | ----------- | -------- | ------------
+market | string | market id   | Yes      | 1
+
+#### Received Message
+
+**command：1008**
+
+```protobuf
+message OrderInfoDto{
+    // Order Id
+    required string Id= 1 ;
+    //User ID
+    required int64 UserId= 2 ;
+    //Currency
+    required string Currency= 3 ;
+    //Handling strategy
+    required int32 FeeStrategy= 4 ;
+    //market
+    required string Market= 5 ;
+    // Order classification
+    required int32 Category= 6 ;
+    //Buy and sell category
+    required int32 OrderType= 7 ;
+    //plan list
+    required int32 PlanType= 8 ;
+    //trigger price
+    required double TriggerPrice= 9 ;
+    //Limited price unit price
+    required double Price= 10 ;
+    // limit order quantity
+    required double Volume= 11 ;
+    //Market price amount
+    required double Amount= 12 ;
+    //Order Status
+    required int32 Status= 13 ;
+    //Create time
+    required int64 CreateTime= 14 ;
+}
+```
+
+Name         | Type   | Description                                                                                  | protobuf tag
+------------ | ------ | -------------------------------------------------------------------------------------------- | ------------
+id           | string | order id                                                                                     | 1
+userId       | long   | user id                                                                                      | 2
+currency     | string | currency                                                                                     | 3
+feeStrategy  | int    | strategy of exchange fee                                                                     | 4
+market       | string | market                                                                                       | 5
+category     | int    | order category. Optional: (1: no stop-limit, 2: stop-limit)                                  | 6
+orderType    | int    | order type. Optional: (1: limit bid, 2: market price bid, 3: limit ask, 4: market price ask) | 7
+planType     | int    | stop-limit order stop type （1:high price stop，2:low price stop）                              | 8
+triggerPrice | double | stop price                                                                                   | 9
+price        | double | limit price                                                                                  | 10
+volume       | double | limit volume                                                                                 | 11
+amount       | double | amount = price * volume                                                                      | 12
+status       | int    | order status （2:pending,3:dealed,4:canceled）                                                 | 13
+createTime   | long   | order creation time                                                                          | 14
+
+**command：1009**
+
+```protobuf
+//ReceiveCommand,1009| Update order information
+message UpdateOrderInfo{
+    //highest price
+    required string Market= 1 ;
+    // Order Id
+    required string OrderId= 2 ;
+    //Trading volume
+    required double TxVolume= 3 ;
+    // transaction amount
+    required double TxAmount= 4 ;
+    //Order Status
+    required int32 Status= 5 ;
+    //Update time
+    required int64 UpdateTime= 6 ;
+}
+```
+
+Name       | Type   | Description                                  | protobuf tag
+:--------- | :----- | -------------------------------------------- | ------------
+market     | string | market id                                    | 1
+orderId    | string | order id                                     | 2
+txVolume   | double | deal volume                                  | 3
+txAmount   | double | deal amount                                  | 4
+status     | int    | order status （2:pending,3:dealed,4:canceled） | 5
+updateTime | long   | order update time                            | 6
+
+**command：1010**
+
+```protobuf
+//ReceiveCommand,1010| Plan to trigger
+message PlanOrderTrigger{
+     //market
+     required string Market= 1 ;
+     / / Plan order ID
+     required string Id= 2 ;
+     //trigger price
+     required double Price= 3 ;
+     //User ID
+     required int64 UserId= 4 ;
+}
+```
+
+Name   | Type   | Description      | protobuf tag
+:----- | :----- | ---------------- | ------------
+market | string | market id        | 1
+id     | string | order id         | 2
+price  | double | stop-limit price | 3
+userId | double | user id          | 4

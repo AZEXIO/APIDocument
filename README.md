@@ -1,15 +1,5 @@
 # Azex exchange API document
 
-Azex交易平台的API分成公开的API与私有API两部分
+[中文文档](https://azexio.github.io/APIDocument/?file=001-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87/000-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E8%AF%A5%E6%96%87%E5%BA%93)
 
-公开API所有人都可以访问
-
-私有API需要签名之后访问
-
-**签名方法见[Http-Api](/HttpAPI/HTTP_API_CN.md/#私人api使用说明)与[websocket](/WebSocketAPI/Websocket_CN.md//#个人api)文档**
-
-目前平台已开放的api有
-
-1. [交易平台http-api](/HttpAPI/HTTP_API_CN.md)
-2. [交易平台websocket](/WebSocketAPI/Websocket_CN.md)
-3. [商户http-api](/商户API/商户API.md)
+[Document](https://azexio.github.io/APIDocument/?file=002-English/000-How%20To%20Read%20This%20Document)

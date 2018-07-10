@@ -8,19 +8,21 @@
 
 Websocket 的链接地址为：**wss://ws.azex.io**
 
-### 序列化
+### 消息结构
 
 #### 消息请求
 
 消息请求组成包括**路由，命令，消息体**三个部分。
 
-请求消息的前四个字节（int32）为**路由** 请求消息的第五与第六个字节为**命令**（int16）。
+请求消息的前四个字节（int32）为**路由** 请求消息的第五与第六个字节为**命令**（int16），剩余部分表示**消息体**。
 
 #### 消息接收
 
 服务器返回的消息由**命令，消息体**两个部分组成
 
 接收的消息前两个字节为**命令**（int16）
+
+#### 消息体序列化方式
 
 **消息体** 的序列化通过[protobuf](https://developers.google.com/protocol-buffers/ "protobuf")进行实现。关于本Websocket的protobuf定义文件，可以通过右侧链接获取：[websocket-protobuf.json](protobuf.json "websocket-protobuf")
 
@@ -31,7 +33,7 @@ Websocket 的链接地址为：**wss://ws.azex.io**
 以"订阅市场深度"为例，**消息体** 的 protobuf 定义如下：
 
 ```protobuf
-//订阅市场深度
+//SendCommand,906|  订阅市场深度
 message SubMarketDepth{
     //市场
     required string Market= 1 ;
@@ -40,15 +42,12 @@ message SubMarketDepth{
     //获取条数，可选值为：10,20,40
     required int32 Limit= 3 ;
 }
-message MarketDepthList{
-    //市场深度列表
-    repeated MarketDepthDto List= 1 ;
-}
-//市场深度快照
+
+//ReceiveCommand,1003|  市场深度快照
 message MarketDepthDto{
     //市场
     required string Market= 1 ;
-    //精度
+    //价格精度
     required int32 Precision= 2 ;
     //卖单列表
     repeated MarketDepth AskList= 3 ;
@@ -56,6 +55,35 @@ message MarketDepthDto{
     repeated MarketDepth BidList= 4 ;
     //版本号
     required int64 Version= 5 ;
+}
+//  单条市场深度
+message MarketDepth{
+    //单价
+    required double P= 1 ;
+    //数量
+    required double V= 2 ;
+}
+//ReceiveCommand,1004|  市场深度差异信息。
+message MarketDepthDiff{
+    //市场
+    required string Market= 1 ;
+    //精度
+    required int32 Precision= 2 ;
+    //卖单差异列表
+    repeated MarketDepth AskList= 3 ;
+    //买单差异列表
+    repeated MarketDepth BidList= 4 ;
+    //起始版本号
+    required int64 StartVersion= 5 ;
+    //截止版本号
+    required int64 EndVersion= 6 ;
+}
+//  单条市场深度
+message MarketDepth{
+    //单价
+    required double P= 1 ;
+    //数量
+    required double V= 2 ;
 }
 ```
 
@@ -101,15 +129,15 @@ function OnWebsocketReceived (byte[] data) {
 
 ## 功能列表
 
-功能            | 提交命令 | 接收命令             | 用处           | 备注
-------------- | ---- | ---------------- | ------------ | -----------------------------------------------------------------------------------------------------
-订阅成交记录        | 907  | 1005             | 最近成交         |
-获取批量K线数据(可订阅) | 900  | 1000,1001 , 1002 | K线图          | 1000单条最新k线，1001部分历史k线，1002批量k线数据推送完成
-订阅最新单条K线数据    | 902  | 1000             | K线图          | Frequencys 可选值 "1", "5", "15", "30", "60", "180", "360", "720", "D", "7D"。分别表示 1分钟、5分钟...720分钟、1天、7天。
-订阅24小时滚动行情    | 902  | 1006             | 币币交易-市场行情、首页 | Frequencys 为 SD1
-订阅市场深度        | 906  | 1003，1004        | 币币交易-最新价格    | 1003深度快照，1004深度差异数据
-订阅个人订单消息      | 1000 | 1008，1009，1010   | 更新 币币交易-当前委托 | 1008订单创建，1009订单更新，1010计划单触发
-错误信息          |      | 0                | 错误信息         |
+功能            | 提交命令 | 接收命令
+------------- | ---- | ------------------------------------
+订阅成交记录        | 907  | 1005
+获取批量K线数据(可订阅) | 900  | 1000单条最新k线 1001部分历史k线 1002批量k线数据推送完成
+订阅最新单条K线数据    | 902  | 1000
+订阅24小时滚动行情    | 902  | 1006
+订阅市场深度        | 906  | 1003深度快照 1004深度差异数据
+订阅个人订单消息      | 1000 | 1008订单创建，1009订单更新，1010计划单触发
+错误信息          |      | 0
 
 ## 公共API
 
@@ -297,10 +325,10 @@ message SubKLineItem{
 
 参数说明
 
-参数名        | 类型     | 说明                                                                                                    | 必填 | protobuf序列
-:--------- | :----- | ----------------------------------------------------------------------------------------------------- | -- | ----------
-market     | string | 市场交易对                                                                                                 | 是  | 1
-frequencys | string | Frequencys 可选值 "1", "5", "15", "30", "60", "180", "360", "720", "D", "7D"。分别表示 1分钟、5分钟...720分钟、1天、7天。 | 是  | 2
+参数名        | 类型       | 说明                                                                                                    | 必填 | protobuf序列
+:--------- | :------- | ----------------------------------------------------------------------------------------------------- | -- | ----------
+market     | string   | 市场交易对                                                                                                 | 是  | 1
+frequencys | string[] | Frequencys 可选值 "1", "5", "15", "30", "60", "180", "360", "720", "D", "7D"。分别表示 1分钟、5分钟...720分钟、1天、7天。 | 是  | 2
 
 #### 接收消息
 
@@ -358,10 +386,10 @@ message SubKLineItem{
 }
 ```
 
-参数名        | 类型     | 说明                            | 必填 | protobuf序列
-:--------- | :----- | ----------------------------- | -- | ----------
-market     | string | 市场交易对                         | 是  | 1
-frequencys | string | Frequencys的值只能为SD1（为了与正常k线区分） | 是  | 2
+参数名        | 类型       | 说明                            | 必填 | protobuf序列
+:--------- | :------- | ----------------------------- | -- | ----------
+market     | string   | 市场交易对                         | 是  | 1
+frequencys | string[] | Frequencys的值只能为SD1（为了与正常k线区分） | 是  | 2
 
 #### 接收消息
 
@@ -474,7 +502,7 @@ volume      | double | 成交量   | 6
 
 第一条增量的数据中包含 StartVersion 和 EndVersion 两个字段。
 
-需要比对深度快照数据的 Version 和 StartVersion 字段。
+将深度快照数据的 Version 字段和增量数据的 StartVersion 字段进行对比。
 
 若两个字段不相等，则说明增量存在丢失情况，需要开发者重新订阅增量数据。
 
@@ -482,7 +510,7 @@ volume      | double | 成交量   | 6
 
 增量数据中包含 StartVersion 和 EndVersion 两个字段。
 
-前一次增量的 EndVersion 字段需要与后一次的 StartVersion 字段的值相同。
+将前一次增量的 EndVersion 字段与后一次的 StartVersion 字段的值进行对比。
 
 若两个字段不相等，则说明增量存在丢失情况，需要开发者重新订阅增量数据。
 
@@ -540,7 +568,7 @@ message MarketDepth{
 参数名       | 类型     | 说明    | protobuf序列
 :-------- | :----- | ----- | ----------
 market    | string | 市场交易对 | 1
-precision | string | 市场精度  | 2
+precision | int    | 市场精度  | 2
 askList   | array  | 单价    | 3
 bidList   | array  | 数量    | 4
 version   | long   | 版本号   | 5
@@ -576,7 +604,7 @@ message MarketDepth{
 参数名          | 类型     | 说明    | protobuf序列
 :----------- | :----- | ----- | ----------
 market       | string | 市场交易对 | 1
-precision    | string | 市场精度  | 2
+precision    | int    | 市场精度  | 2
 askList      | array  | 卖盘    | 3
 bidList      | array  | 买盘    | 4
 startVersion | double | 起始版本号 | 5
@@ -670,7 +698,7 @@ message OrderInfoDto{
 id           | string | 订单id                       | 1
 userId       | long   | 用户id                       | 2
 currency     | string | 币种                         | 3
-feeCurrency  | string | 手续费币种                      | 4
+feeStrategy  | int    | 手续费策略                      | 4
 market       | string | 市场                         | 5
 category     | int    | 订单分类（1非计划订单，2计划订单）         | 6
 orderType    | int    | 订单类型（1限价买单2市价买单3限价卖单4市价卖单） | 7

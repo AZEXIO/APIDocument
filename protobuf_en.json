@@ -1,0 +1,248 @@
+//This file was generated on 2018/7/10 11:14:31
+//SendCommand,900| Subscribe to the market batch K line
+message GetKLineList{
+    //market
+    required string Market= 1 ;
+    //K line type
+    required string Frequency= 2 ;
+    //Starting time
+    required int64 Start= 3 ;
+    //End Time
+    required int64 End= 4 ;
+    //Do you subscribe?
+    required bool Subscribe= 5 [default = true];
+}
+//SendCommand, 902| Subscribe to the K line
+message SubKLine{
+    //Subscription details
+    repeated SubKLineItem Items= 1 ;
+}
+// K line subscription parameters
+message SubKLineItem{
+    //market
+    required string Market= 1 ;
+    //K line type
+    repeated string Frequencys= 2 ;
+}
+//SendCommand,906| Subscribe to market depth
+message SubMarketDepth{
+    //market
+    required string Market= 1 ;
+    // decimal place precision
+    required int32 Precision= 2 ;
+    // Get the number of bars, the optional value is: 10, 20, 40
+    required int32 Limit= 3 ;
+}
+//SendCommand,907| Get the latest deal list
+message GetTopTradeList{
+    //market
+    required string Market= 1 ;
+    //quantity
+    required int32 Count= 2 ;
+    // subscribed
+    required bool Subscribe= 3 ;
+}
+//SendCommand, 1000| Login to the market
+message LoginToMarket{
+    //market
+    required string Market= 1 ;
+}
+//ReceiveCommand,0| error message
+message WsError{
+    //error code
+    required int32 Code= 1 ;
+    //Error message
+    required string message= 2 ;
+}
+//ReceiveCommand, 1000| K-line data
+message WsKLine{
+    //market
+    required string Market= 1 ;
+    //K line type
+    required string Frequency= 2 ;
+    // volume
+    required double Volume= 3 ;
+    //Opening price
+    required double OpenPrice= 4 ;
+    //Closing price
+    required double ClosedPrice= 5 ;
+    //lowest price
+    required double LowPrice= 6 ;
+    //highest price
+    required double HighPrice= 7 ;
+    //Opening time
+    required int64 OpenTime= 8 ;
+}
+//ReceiveCommand,1001| Batch K line data
+message WsKLineList{
+    //K line data
+    repeated WsKLine List= 1 ;
+}
+// K line data
+message WsKLine{
+    //market
+    required string Market= 1 ;
+    //K line type
+    required string Frequency= 2 ;
+    // volume
+    required double Volume= 3 ;
+    //Opening price
+    required double OpenPrice= 4 ;
+    //Closing price
+    required double ClosedPrice= 5 ;
+    //lowest price
+    required double LowPrice= 6 ;
+    //highest price
+    required double HighPrice= 7 ;
+    //Opening time
+    required int64 OpenTime= 8 ;
+}
+//ReceiveCommand, 1002| K line data batch transmission completed
+message BatchSendComplate{
+    //market
+    required string Market= 1 ;
+    //K line type
+    required string Frequency= 2 ;
+    //Starting time
+    required int64 Start= 3 ;
+    //deadline
+    required int64 End= 4 ;
+    // Whether to reach the starting point of the K line
+    required bool IsStart= 5 ;
+}
+//ReceiveCommand,1003| Market depth snapshot
+message MarketDepthDto{
+    //market
+    required string Market= 1 ;
+    //Price accuracy
+    required int32 Precision= 2 ;
+    //list of sell orders
+    repeated MarketDepth AskList= 3 ;
+    //Buy list
+    repeated MarketDepth BidList= 4 ;
+    //version number
+    required int64 Version= 5 ;
+}
+// Single market depth
+message MarketDepth{
+    //unit price
+    required double P= 1 ;
+    //quantity
+    required double V= 2 ;
+}
+//ReceiveCommand,1004| Market depth difference information.
+message MarketDepthDiff{
+    //market
+    required string Market= 1 ;
+    // precision
+    required int32 Precision= 2 ;
+    //Sell order difference list
+    repeated MarketDepth AskList= 3 ;
+    //Buy order difference list
+    repeated MarketDepth BidList= 4 ;
+    // starting version number
+    required int64 StartVersion= 5 ;
+    //cutoff version number
+    required int64 EndVersion= 6 ;
+}
+// Single market depth
+message MarketDepth{
+    //unit price
+    required double P= 1 ;
+    //quantity
+    required double V= 2 ;
+}
+//ReceiveCommand,1005| Recent Deal List
+message TradeSimpleDtoList{
+    //Recent deal list
+    repeated TradeSimpleData List= 1 ;
+}
+// Deal information
+message TradeSimpleData{
+    //market
+    required string Market= 1 ;
+    //Transaction Id
+    required int64 Id= 2 ;
+    // deal price
+    required double Price= 3 ;
+    // volume
+    required double Volume= 4 ;
+    // amount
+    required double Amount= 5 ;
+    // price trend
+    required int32 Trend= 6 ;
+    // deal time
+    required int64 CreateTime= 7 ;
+}
+//ReceiveCommand,1006| 24 hour scrolling data
+message ScrollDayKLine{
+    //market
+    required string Market= 1 ;
+    //Opening price
+    required double OpenPrice= 2 ;
+    //Closing price
+    required double ClosedPrice= 3 ;
+    //lowest price
+    required double LowPrice= 4 ;
+    //highest price
+    required double HighPrice= 5 ;
+    // volume
+    required double Volume= 6 ;
+}
+//ReceiveCommand,1008| Order Information
+message OrderInfoDto{
+    // Order Id
+    required string Id= 1 ;
+    //User ID
+    required int64 UserId= 2 ;
+    //Currency
+    required string Currency= 3 ;
+    //Handling strategy
+    required int32 FeeStrategy= 4 ;
+    //market
+    required string Market= 5 ;
+    // Order classification
+    required int32 Category= 6 ;
+    //Buy and sell category
+    required int32 OrderType= 7 ;
+    //plan list
+    required int32 PlanType= 8 ;
+    //trigger price
+    required double TriggerPrice= 9 ;
+    //Limited price unit price
+    required double Price= 10 ;
+    // limit order quantity
+    required double Volume= 11 ;
+    //Market price amount
+    required double Amount= 12 ;
+    //Order Status
+    required int32 Status= 13 ;
+    //Create time
+    required int64 CreateTime= 14 ;
+}
+//ReceiveCommand,1009| Update order information
+message UpdateOrderInfo{
+    //highest price
+    required string Market= 1 ;
+    // Order Id
+    required string OrderId= 2 ;
+    //Trading volume
+    required double TxVolume= 3 ;
+    // transaction amount
+    required double TxAmount= 4 ;
+    //Order Status
+    required int32 Status= 5 ;
+    //Update time
+    required int64 UpdateTime= 6 ;
+}
+//ReceiveCommand,1010| Plan to trigger
+message PlanOrderTrigger{
+     //market
+     required string Market= 1 ;
+     / / Plan order ID
+     required string Id= 2 ;
+     //trigger price
+     required double Price= 3 ;
+     //User ID
+     required int64 UserId= 4 ;
+}

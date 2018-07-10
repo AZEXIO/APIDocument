@@ -1,4 +1,5 @@
 {
-     "name": "Azex exchange API document",
-     "ver": "v1.0"
- }
+    "name": "Azex exchange API document",
+    "ver": "v1.0",
+    "logo": "assets/logo.svg"
+}

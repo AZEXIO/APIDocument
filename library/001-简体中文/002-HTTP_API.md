@@ -14,18 +14,21 @@ GET 请求参数在 QueryString 中进行传递。
 
 POST 请求参数在 Body 中进行传递。
 
-必须包含以下两个Header
+请求中必须包含以下两个Header
 
 Name         | Value
 ------------ | ---------------------------------
 Content-Type | application/x-www-form-urlencoded
 Accept       | application/json
 
-默认的，服务端返回的提示错误信息为英文提示，若需要改变提示内容，需要传递以下Header
+默认的，服务端返回的提示错误信息为英文提示，若需要改变提示内容，需要传递名为 Lang 的 Header。
 
-Name | Value
----- | ---------------
-Lang | cn:简体中文 , en:英文
+相应的值与语言的对照关系如下：
+
+值  | 语言
+-- | ----
+cn | 简体中文
+en | 英文
 
 ### 响应结果
 
@@ -420,12 +423,12 @@ sign       | string | 加密签名          | 是
 #### 返回参数说明
 
 参数名              | 类型     | 说明
----------------- | ------ | ----
+---------------- | ------ | ------------------------
 currency         | string | 币种代码
 lockedBalance    | double | 冻结余额
 availableBalance | double | 可用余额
 mortgagedBalance | double | 抵押余额
-totalBalance     | double | 总余额
+totalBalance     | double | 总余额 = 冻结余额 + 可用余额 + 抵押余额
 
 ### 市价与限价单下单
 
@@ -639,4 +642,4 @@ createTime   | long   | 订单创建时间
 2:计划订单  | 1:限价买单 | 1:高价触发  | 市场价高于triggerPrice时，自动下一个限价买单
 2:计划订单  | 1:限价买单 | 2:低价触发  | 市场价低于triggerPrice时，自动下一个限价买单
 2:计划订单  | 3:限价卖单 | 1:高价触发  | 市场价高于triggerPrice时，自动下一个限价卖单
-2:计划订单  | 4:限价卖单 | 2:低价触发  | 市场价低于triggerPrice时，自动下一个限价卖单
+2:计划订单  | 3:限价卖单 | 2:低价触发  | 市场价低于triggerPrice时，自动下一个限价卖单

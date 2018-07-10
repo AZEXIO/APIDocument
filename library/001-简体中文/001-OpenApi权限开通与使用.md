@@ -4,10 +4,17 @@
 
 ## 申请开通OpenAPI权限
 
-[TODO]
-
 1. 登录AZEX
-2. 创建API
+
+  访问 <https://www.azex.io> 并登陆账号，进入"账号设置->API管理->添加API"，创建OpenApi。
+
+2. 获得ApiKey和Secret
+
+  成功通过二次认证之后，便可以获取ApiKey和Secret。
+
+  **注意：ApiKey和Secret仅展现一次，请妥善保管。**
+
+  **注意：ApiKey和Secret是关乎用户资产的重要数据，请妥善保管，谨防泄露。**
 
 ## 如何使用ApiKey和Secret
 
