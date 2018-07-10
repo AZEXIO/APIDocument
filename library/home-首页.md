@@ -1,10 +1,5 @@
 # Azex exchange API document
 
-<br>
+本文库为开发者提供对接 AZEX 提供帮助，建议读者先阅读 [如何使用该文库](?file=001-简体中文/000-如何使用该文库 "如何使用该文库")
 
-![欢迎使用amWiki！](amWiki/images/logo.png "欢迎使用amWiki！")  
-
-### 欢迎使用 amWiki 轻文库!
-—— **amWiki 致力于让大家可以更简单、更便捷的建设个人和团队文库！**  
-
-[ [amWiki 官网文档中心](https://amwiki.org/doc/) ]
+This library provides developers with help for docking AZEX. Readers are advised to read [How To Read This Document](?file=002-English/000-How%20To%20Read%20This%20Document "How To Read This Document") first.

@@ -10,6 +10,6 @@
 
 ##### English
 - [How To Read This Document](?file=002-English/000-How To Read This Document "How To Read This Document")
-- [Sign](?file=002-English/001-Sign "Sign")
+- [How To Get OpenApi And Use It](?file=002-English/001-How To Get OpenApi And Use It "How To Get OpenApi And Use It")
 - [HTTP_API](?file=002-English/002-HTTP_API "HTTP_API")
-- [Websocket_EN](?file=002-English/003-Websocket_EN "Websocket_EN")
+- [Websocket](?file=002-English/003-Websocket "Websocket")
