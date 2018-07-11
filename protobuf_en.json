@@ -1,4 +1,4 @@
-//This file was generated on 2018/7/10 11:14:31
+//This file was generated on 2018/7/11 2:48:51
 //SendCommand,900| Subscribe to the market batch K line
 message GetKLineList{
     //market
@@ -78,25 +78,6 @@ message WsKLineList{
     //K line data
     repeated WsKLine List= 1 ;
 }
-// K line data
-message WsKLine{
-    //market
-    required string Market= 1 ;
-    //K line type
-    required string Frequency= 2 ;
-    // volume
-    required double Volume= 3 ;
-    //Opening price
-    required double OpenPrice= 4 ;
-    //Closing price
-    required double ClosedPrice= 5 ;
-    //lowest price
-    required double LowPrice= 6 ;
-    //highest price
-    required double HighPrice= 7 ;
-    //Opening time
-    required int64 OpenTime= 8 ;
-}
 //ReceiveCommand, 1002| K line data batch transmission completed
 message BatchSendComplate{
     //market
@@ -144,13 +125,6 @@ message MarketDepthDiff{
     required int64 StartVersion= 5 ;
     //cutoff version number
     required int64 EndVersion= 6 ;
-}
-// Single market depth
-message MarketDepth{
-    //unit price
-    required double P= 1 ;
-    //quantity
-    required double V= 2 ;
 }
 //ReceiveCommand,1005| Recent Deal List
 message TradeSimpleDtoList{
